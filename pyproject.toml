@@ -12,7 +12,7 @@ python = "^3.6"
 click = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
 sqlalchemy = { version = "*", optional = true }
-setuplog = { version = "*", optional = true }
+setuplog = "*"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -33,7 +33,6 @@ url = "https://artifactory.schireson.com/artifactory/api/pypi/pypi/simple"
 click = ["click"]
 sqlalchemy = ["sqlalchemy"]
 sentry = ["sentry-sdk"]
-logging = ["setuplog"]
 
 [tool.black]
 line_length = 100
