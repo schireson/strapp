@@ -4,11 +4,10 @@ import traceback
 
 import click
 
-import sentry_sdk
-
-
-option = click.option
-argument = click.argument
+try:
+    import sentry_sdk
+except ImportError:
+    sentry_sdk = None
 
 
 class Resolver:
@@ -38,6 +37,7 @@ class Resolver:
         ...     pass
 
     """
+
     def __init__(self, **producers):
         self.producers = producers
         self.values = {}
@@ -96,7 +96,8 @@ class Resolver:
                     raise
                 except Exception as e:
                     click.echo(traceback.format_exc())
-                    sentry_sdk.capture_exception(e)
+                    if sentry_sdk:
+                        sentry_sdk.capture_exception(e)
                     raise click.Abort(str(e))
 
             return wrapper
