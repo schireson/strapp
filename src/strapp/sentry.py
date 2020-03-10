@@ -1,23 +1,23 @@
-import logging
 import contextlib
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
+from setuplog import log, M
 
-log = logging.getLogger(__name__)
 
+def setup_sentry(
+    dsn, environment=None, service_name=None, level="WARNING", breadcrumb_level="INFO"
+):
+    """Initialize sentry.
 
-def setup_sentry(dsn, environment=None, service_name=None, level='WARNING', breadcrumb_level='INFO'):
-    """Setup sentry.
-
-    It's expected that this function is called once at app startup
+    It's expected that this function is called once at app startup.
     """
     sentry_sdk.init(
         dsn=dsn,
         integrations=[
-            LoggingIntegration(level=level, event_level=event_level),
+            LoggingIntegration(level=breadcrumb_level, event_level=level),
             SqlalchemyIntegration(),
         ],
         attach_stacktrace=True,
@@ -52,13 +52,16 @@ def add_context(*, user: Optional[Dict] = None, extra: Optional[Dict[str, Any]] 
     """
     with sentry_sdk.push_scope() as scope:
         for name, value in tags.items():
+            log.debug(M("Sentry: Tag({}={})", name, value))
             scope.set_tag(name, value)
 
         if user is not None:
+            log.debug(M("Sentry: User({})", user))
             scope.user = user
 
         if extra is not None:
             for key, value in extra.items():
+                log.debug(M("Sentry: Extra({}={})", key, value))
                 scope.set_extra(key, value)
 
         yield

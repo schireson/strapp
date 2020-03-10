@@ -7,3 +7,4 @@ except ImportError:
     pass
 else:
     pytest.register_assert_rewrite("strapp.sqlalchemy.testing")
+    del pytest
