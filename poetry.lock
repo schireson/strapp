@@ -530,7 +530,7 @@ description = "PyYAML-based module to produce pretty and readable YAML-serialize
 name = "pyaml"
 optional = false
 python-versions = "*"
-version = "19.12.0"
+version = "20.3.1"
 
 [package.dependencies]
 PyYAML = "*"
@@ -791,7 +791,7 @@ tornado = ["tornado (>=5)"]
 category = "main"
 description = ""
 name = "setuplog"
-optional = true
+optional = false
 python-versions = ">=3.6.0,<4"
 version = "0.2.0"
 
@@ -946,7 +946,7 @@ description = "Database Abstraction Library"
 name = "sqlalchemy"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-version = "1.3.13"
+version = "1.3.14"
 
 [package.extras]
 mssql = ["pyodbc"]
@@ -1091,12 +1091,11 @@ testing = ["jaraco.itertools", "func-timeout"]
 
 [extras]
 click = ["click"]
-logging = ["setuplog"]
 sentry = ["sentry-sdk"]
 sqlalchemy = ["sqlalchemy"]
 
 [metadata]
-content-hash = "4e9ee1cacafc198bc77902108486da1bf1fd56c4d36aaf460add640bc546cd13"
+content-hash = "8fb8f7c228d3572036fac0a1d465c52c1d24a753991797b6475d725e1da58bf6"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -1362,8 +1361,8 @@ py = [
     {file = "py-1.8.1.tar.gz", hash = "sha256:5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa"},
 ]
 pyaml = [
-    {file = "pyaml-19.12.0-py2.py3-none-any.whl", hash = "sha256:10b7406f4d29dceca1bc4540713363e07c18886ac9a44edd3d7720314bdcb0ff"},
-    {file = "pyaml-19.12.0.tar.gz", hash = "sha256:b3f636b467864319d7ded1558f86bb305b8612a274f5d443a62dc5eceb1b7176"},
+    {file = "pyaml-20.3.1-py2.py3-none-any.whl", hash = "sha256:b077066dec4a1a834e376bd69b8b38677c69c62b270160cde35d76dc40ca9ec1"},
+    {file = "pyaml-20.3.1.tar.gz", hash = "sha256:9914879e6ac5cbf09b8cd5d3ba09e241ffcfd91c689cddc8d8b66a68c1c7e640"},
 ]
 pycodestyle = [
     {file = "pycodestyle-2.5.0-py2.py3-none-any.whl", hash = "sha256:95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56"},
@@ -1560,7 +1559,7 @@ sphinxcontrib-serializinghtml = [
     {file = "sphinxcontrib_serializinghtml-1.1.4-py2.py3-none-any.whl", hash = "sha256:f242a81d423f59617a8e5cf16f5d4d74e28ee9a66f9e5b637a18082991db5a9a"},
 ]
 sqlalchemy = [
-    {file = "SQLAlchemy-1.3.13.tar.gz", hash = "sha256:64a7b71846db6423807e96820993fa12a03b89127d278290ca25c0b11ed7b4fb"},
+    {file = "SQLAlchemy-1.3.14.tar.gz", hash = "sha256:b92d2de62e43499d85b1780274d1b562e5159c7996f6f04a9bb46cf681ced45f"},
 ]
 sqlalchemy-stubs = [
     {file = "sqlalchemy-stubs-0.3.tar.gz", hash = "sha256:a3318c810697164e8c818aa2d90bac570c1a0e752ced3ec25455b309c0bee8fd"},
