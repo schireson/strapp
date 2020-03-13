@@ -45,16 +45,19 @@ class Resolver:
     def register_values(self, **values):
         self.values.update(values)
 
+    def reset_cache(self):
+        self.values = {}
+
     def resolve(self, fn):
         arg_context = {}
 
         signature = inspect.signature(fn)
         for param_name, param in signature.parameters.items():
             producer = self.producers.get(param_name)
-            if not producer:
-                continue
-
             if param_name not in self.values:
+                if not producer:
+                    continue
+
                 context = self.resolve(producer)
                 self.values[param_name] = producer(**context)
 
@@ -71,7 +74,8 @@ class Resolver:
             @functools.wraps(fn)
             def wrapper(*args, **kwargs):
                 context = self.resolve(fn)
-                result = fn(*args, **kwargs, **context)
+                final_kwargs = {**context, **kwargs}
+                result = fn(*args, **final_kwargs)
                 return result
 
             return wrapper
@@ -84,9 +88,9 @@ class Resolver:
             @functools.wraps(fn)
             def wrapper(*args, **kwargs):
                 context = self.resolve(fn)
-
+                final_kwargs = {**context, **kwargs}
                 try:
-                    return fn(*args, **kwargs, **context)
+                    return fn(*args, **final_kwargs)
                 except (click.ClickException, click.Abort):
                     raise
                 except Exception as e:

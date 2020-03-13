@@ -156,3 +156,51 @@ def test_bad_assertion_unsuccessful():
 
     with pytest.raises(AssertionError):
         result.assert_unsuccessful()
+
+
+def test_value_without_producer():
+    resolver = Resolver()
+    resolver.register_values(a=4)
+
+    def foo(a):
+        return a
+
+    result = resolver.resolve(foo)
+    assert result == {"a": 4}
+
+
+def test_double_submission_group():
+    resolver = Resolver()
+    resolver.register_values(a=4)
+
+    @resolver.group()
+    @click.option("--a")
+    def group(a):
+        pass
+
+    @resolver.command(group)
+    def foo(a):
+        pass
+
+    result = ClickRunner(group).invoke("--a", "woah", "foo")
+
+    result.assert_successful()
+
+
+def test_double_submission_command():
+    resolver = Resolver()
+    resolver.register_values(a=4)
+
+    @resolver.group()
+    def group():
+        pass
+
+    @resolver.command(group)
+    @click.option("--a")
+    def foo(a):
+        pass
+
+    result = ClickRunner(group).invoke("foo", "--a", "woah")
+
+    result.assert_successful()
+

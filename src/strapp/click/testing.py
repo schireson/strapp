@@ -1,12 +1,8 @@
 import contextlib
-import logging
 import unittest.mock
 from dataclasses import dataclass
 
 from click.testing import CliRunner, Result
-
-
-log = logging.getLogger(__name__)
 
 
 class ClickRunner:
@@ -33,13 +29,13 @@ class ClickResult:
     result: Result
 
     def assert_successful(self):
-        if self.result.exit_code:
-            log.warning(self.result.output)
+        if self.result.exit_code != 0:
+            print(self.result.output)
         assert self.result.exit_code == 0
 
     def assert_unsuccessful(self):
-        if self.result.exit_code:
-            log.warning(self.result.output)
+        if self.result.exit_code == 0:
+            print(self.result.output)
         assert self.result.exit_code == 1
 
     def __getattr__(self, attr):
