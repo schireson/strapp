@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = []
 packages = [
@@ -12,11 +12,12 @@ python = "^3.6"
 click = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
 sqlalchemy = { version = "*", optional = true }
-setuplog = "*"
+setuplog = { version = "*", optional = true }
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
 black = "^19.10b0"
+coverage = "*"
 flake8 = "^3.7.9"
 isort = "^4.3.21"
 mypy = "^0.740"
@@ -31,6 +32,7 @@ url = "https://artifactory.schireson.com/artifactory/api/pypi/pypi/simple"
 
 [tool.poetry.extras]
 click = ["click"]
+loggin = ["setuplog"]
 sqlalchemy = ["sqlalchemy"]
 sentry = ["sentry-sdk"]
 

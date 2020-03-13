@@ -20,6 +20,7 @@ def declarative_base(base=None, *, repr=True):
         >>> Base = declarative_base()
         >>> class Example(Base, created_at=True, updated_at=False):
         ...     __tablename__ = 'example'
+        ...     id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True)
     """
     if base is None:
         base = declarative.declarative_base(metaclass=_DeclarativeMeta)

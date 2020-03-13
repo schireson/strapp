@@ -6,8 +6,8 @@ import click
 
 try:
     import sentry_sdk
-except ImportError:
-    sentry_sdk = None
+except ImportError:  # pragma: nocover
+    sentry_sdk = None  # type: ignore
 
 
 class Resolver:
@@ -42,10 +42,6 @@ class Resolver:
         self.producers = producers
         self.values = {}
 
-        for attr, component in self.producers.items():
-            if not callable(component):
-                self.values[attr] = component
-
     def register_values(self, **values):
         self.values.update(values)
 
@@ -55,13 +51,12 @@ class Resolver:
         signature = inspect.signature(fn)
         for param_name, param in signature.parameters.items():
             producer = self.producers.get(param_name)
-            if param_name not in self.values:
-                if not producer:
-                    continue
+            if not producer:
+                continue
 
-                if param_name not in self.values:
-                    context = self.resolve(producer)
-                    self.values[param_name] = producer(**context)
+            if param_name not in self.values:
+                context = self.resolve(producer)
+                self.values[param_name] = producer(**context)
 
             arg_context[param_name] = self.values[param_name]
 
@@ -92,13 +87,13 @@ class Resolver:
 
                 try:
                     return fn(*args, **kwargs, **context)
-                except click.ClickException:
+                except (click.ClickException, click.Abort):
                     raise
                 except Exception as e:
                     click.echo(traceback.format_exc())
                     if sentry_sdk:
                         sentry_sdk.capture_exception(e)
-                    raise click.Abort(str(e))
+                    raise click.ClickException(str(e))
 
             return wrapper
 

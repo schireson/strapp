@@ -1,15 +1,12 @@
 import contextlib
-import functools
-import inspect
-import traceback
+import logging
 import unittest.mock
 from dataclasses import dataclass
 
-import click
 from click.testing import CliRunner, Result
 
-import sentry_sdk
-from setuplog import log
+
+log = logging.getLogger(__name__)
 
 
 class ClickRunner:
@@ -39,6 +36,11 @@ class ClickResult:
         if self.result.exit_code:
             log.warning(self.result.output)
         assert self.result.exit_code == 0
+
+    def assert_unsuccessful(self):
+        if self.result.exit_code:
+            log.warning(self.result.output)
+        assert self.result.exit_code == 1
 
     def __getattr__(self, attr):
         return getattr(self.result, attr)

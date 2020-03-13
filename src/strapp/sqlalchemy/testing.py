@@ -40,7 +40,9 @@ def _collect_loaded_values(instance, include=None, exclude=None):
 
     result = []
     for column in columns:
-        if not state.attrs[column].deferred:
+        if state.attrs[column].deferred:
+            result.append(None)
+        else:
             value = getattr(instance, column)
             result.append(value)
 

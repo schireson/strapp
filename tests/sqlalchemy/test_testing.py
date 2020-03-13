@@ -11,7 +11,7 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1)
         b = Foo(id=2)
@@ -23,7 +23,7 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1)
         assert_equals(a, (1,))
@@ -33,7 +33,7 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1)
         b = Foo(id=1)
@@ -44,8 +44,8 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
-            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1, id2=2)
         b = Foo(id=1, id2=1)
@@ -58,8 +58,8 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
-            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1, id2=2)
         b = Foo(id=1, id2=1)
@@ -72,8 +72,8 @@ class Test_assert_equals:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
-            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+            id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
         a = Foo(id=1, id2=2)
         b = Foo(id=1, id2=1)
@@ -89,3 +89,44 @@ class Test_assert_equals:
         with pytest.raises(AssertionError):
             assert_models_equal3(a, b)
             assert_models_equal4(a, b)
+
+    def test_deferred(self):
+        Base = declarative_base()
+
+        class Foo(Base):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+            id2 = sqlalchemy.orm.deferred(
+                sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+            )
+
+        a = Foo(id=1, id2=2)
+        b = Foo(id=1, id2=1)
+
+        assert_equals(a, b)
+
+    def test_invalid_include(self):
+        Base = declarative_base()
+
+        class Foo(Base):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+
+        a = Foo(id=1)
+
+        with pytest.raises(ValueError) as e:
+            assert_equals(a, a, include=["wat"])
+        assert "wat" in str(e.value)
+
+    def test_invalid_exclude(self):
+        Base = declarative_base()
+
+        class Foo(Base):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+
+        a = Foo(id=1)
+
+        with pytest.raises(ValueError) as e:
+            assert_equals(a, a, exclude=["wat"])
+        assert "wat" in str(e.value)
