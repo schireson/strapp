@@ -1,6 +1,11 @@
 import logging
 from setuplog import setup_logging  # noqa
 
+DEBUG = logging.DEBUG
+INFO = logging.INFO
+WARNING = logging.WARNING
+ERROR = logging.ERROR
+
 
 _log = logging.getLogger(__name__)
 
