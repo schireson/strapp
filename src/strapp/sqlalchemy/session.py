@@ -4,12 +4,16 @@ import logging
 log = logging.getLogger(__name__)
 
 
-def create_session(config: dict, *, dry_run: bool = False, verbosity: int = 0):
+def create_session_cls(config: dict, *, scopefunc=None):
     url = sqlalchemy.engine.url.URL(**config)
     engine = sqlalchemy.create_engine(url)
-    Session = sqlalchemy.orm.scoping.scoped_session(
-        sqlalchemy.orm.session.sessionmaker(bind=engine)
+    return sqlalchemy.orm.scoping.scoped_session(
+        sqlalchemy.orm.session.sessionmaker(bind=engine), scopefunc=scopefunc,
     )
+
+
+def create_session(config: dict, *, scopefunc=None, dry_run: bool = False, verbosity: int = 0):
+    Session = create_session_cls(config, scopefunc=scopefunc)
     session = Session()
 
     if dry_run:
