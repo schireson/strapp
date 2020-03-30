@@ -10,9 +10,11 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.6"
 click = { version = "*", optional = true }
+flask = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
 sqlalchemy = { version = "*", optional = true }
 setuplog = { version = "*", optional = true }
+flask_reverse_proxy = { version = "*", optional = true }
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -35,6 +37,7 @@ click = ["click"]
 logging = ["setuplog"]
 sqlalchemy = ["sqlalchemy"]
 sentry = ["sentry-sdk"]
+flask = ["flask", "flask_reverse_proxy"]
 
 [tool.black]
 line_length = 100
