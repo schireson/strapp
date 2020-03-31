@@ -1,18 +1,29 @@
-import sqlalchemy.orm
 import logging
+from typing import Mapping
+
+import sqlalchemy.orm
 
 log = logging.getLogger(__name__)
 
 
-def create_session_cls(config: dict, *, scopefunc=None):
-    url = sqlalchemy.engine.url.URL(**config)
+def create_session_cls(config: Mapping, *, scopefunc=None):
+    url = sqlalchemy.engine.url.URL(**dict(config))
     engine = sqlalchemy.create_engine(url)
     return sqlalchemy.orm.scoping.scoped_session(
         sqlalchemy.orm.session.sessionmaker(bind=engine), scopefunc=scopefunc,
     )
 
 
-def create_session(config: dict, *, scopefunc=None, dry_run: bool = False, verbosity: int = 0):
+def create_session(config: Mapping, *, scopefunc=None, dry_run: bool = False, verbosity: int = 0):
+    """Create a sqlalchemy session.
+
+    Args:
+        config: The dict-like set of options to :class:`sqlalchemy.engine.url.URL`
+        scopefunc: The optional `scopefunc` arg to :class:`sqlalchemy.orm.scoping.scoped_session`
+        dry_run: If :code:`True`, wraps the session such that it cannot perform `commit` operations
+        verbosity: Only applies to `dry_run` sessions, but when > 0 will log the state of the
+            session on would-be commit operations.
+    """
     Session = create_session_cls(config, scopefunc=scopefunc)
     session = Session()
 

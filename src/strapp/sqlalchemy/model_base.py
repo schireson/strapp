@@ -13,8 +13,9 @@ def declarative_base(base=None, *, repr=True):
 
     Additionally, subclasses of the resultant `Base` accept the following class
     definition options:
-        created_at: True/False
-        updated_at: True/False
+
+        * created_at: True/False
+        * updated_at: True/False
 
     Examples:
         >>> Base = declarative_base()

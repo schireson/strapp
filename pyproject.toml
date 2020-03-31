@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.1.3"
+version = "0.2.0"
 description = ""
 authors = []
 packages = [
@@ -13,7 +13,6 @@ click = { version = "*", optional = true }
 flask = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
 sqlalchemy = { version = "*", optional = true }
-setuplog = { version = "*", optional = true }
 flask_reverse_proxy = { version = "*", optional = true }
 
 [tool.poetry.dev-dependencies]

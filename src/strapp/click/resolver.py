@@ -13,16 +13,21 @@ except ImportError:  # pragma: nocover
 class Resolver:
     """Wrapper click command/group decorators to automatically provide contextual objects to cli commands.
 
+    Args:
+        producers: A mapping from the name that a resource should resolve to when a command asks for it,
+            to a callable which can produce that resource. That callable can accept any other resource
+            (so long as there are no cycles which make it impossible to resolve a given resource).
+
     Examples:
         >>> from strapp import click
         >>>
         >>> def config():
         ...     return {"value": 1}
         >>>
-        >>> def database_engine():
+        >>> def database_engine(config):
         ...     return ...
         >>>
-        >>> resolver = click.Resolver(
+        >>> resolver = Resolver(
         ...     config=config,
         ...     database_engine=database_engine,
         ... )
@@ -33,7 +38,7 @@ class Resolver:
         >>>
         >>> @resolver.command(cli)
         ... @click.option('--option')
-        ... def command(config, database_engine):
+        ... def command(database_engine):
         ...     pass
 
     """
@@ -43,6 +48,19 @@ class Resolver:
         self.values = {}
 
     def register_values(self, **values):
+        """Add i.e. already resolved "values" to the resolver.
+
+        This is typically used for things which are produced from inside a command/group itself.
+
+        Examples:
+            >>> resolver = Resolver()
+            >>>
+            >>> @resolver.group()
+            ... @click.option('--dry-run', is_flag=True)
+            ... @click.option('--verbose', count=True, default=0)
+            ... def cli(dry_run, verbose):
+            ...     resolver.register_value(dry_run=dry_run, verbosity=verbose)
+        """
         self.values.update(values)
 
     def reset_cache(self):
@@ -66,6 +84,8 @@ class Resolver:
         return arg_context
 
     def group(self, cli=None, *group_args, **group_kwargs):
+        """Alias :func:`click.group`, which can automatically resolve and inject arguments.
+        """
         if cli is None:
             cli = click
 
@@ -83,6 +103,12 @@ class Resolver:
         return decorator
 
     def command(self, group, *command_args, **command_kwargs):
+        """Alias :func:`click.command`, which can automatically resolve and inject arguments.
+
+        The primary difference between this and :func:`click.command` is that :meth:`Resolver.command`
+        accepts its cli group as an argument, rather than being a method on the group itself.
+        """
+
         def decorator(fn):
             @group.command(*command_args, **command_kwargs)
             @functools.wraps(fn)

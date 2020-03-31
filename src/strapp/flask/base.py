@@ -1,10 +1,10 @@
-from typing import Optional
+from typing import Mapping, Optional
 
 import flask
 from flask_reverse_proxy import FlaskReverseProxied
 
-from strapp.flask.route import Route
 from strapp.flask.error import default_error_handlers
+from strapp.flask.route import Route
 
 
 def register_error_handlers(app, error_handlers):
@@ -33,7 +33,7 @@ def register_plugins(app, plugins, *, proxied=True):
 def create_app(
     routes=None,
     *,
-    config: Optional[dict] = None,
+    config: Optional[Mapping] = None,
     plugins=None,
     error_handlers=None,
     flask_args=None,

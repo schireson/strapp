@@ -1,7 +1,9 @@
+from typing import Mapping
+
 import flask
 
 
-def sqlalchemy_database(app: flask.Flask, config: dict):
+def sqlalchemy_database(app: flask.Flask, config: Mapping):
     from strapp.sqlalchemy import create_session_cls
 
     Session = create_session_cls(config, scopefunc=flask._app_ctx_stack.__ident_func__)
@@ -17,7 +19,7 @@ def sqlalchemy_database(app: flask.Flask, config: dict):
     return session
 
 
-def database_callback(db_func, config: dict, extension_key="db"):
+def database_callback(db_func, config: Mapping, extension_key="db"):
     def callback(app: flask.Flask):
         session = db_func(app, config)
         app.extensions[extension_key] = session
