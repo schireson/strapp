@@ -1,5 +1,6 @@
-from strapp.flask import Route
 import pytest
+
+from strapp.flask import Route
 
 
 def view():
@@ -40,4 +41,4 @@ def test_invalid_parse():
     in_route = (1, 2, 3, 4, 5, 6)
     with pytest.raises(ValueError) as e:
         Route.parse(in_route)
-    assert str(e.value) == 'Could not parse (1, 2, 3, 4, 5, 6) as route'
+    assert str(e.value) == "Could not parse (1, 2, 3, 4, 5, 6) as route"

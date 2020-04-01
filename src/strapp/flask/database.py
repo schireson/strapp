@@ -10,7 +10,7 @@ def sqlalchemy_database(app: flask.Flask, config: Mapping):
     """
     from strapp.sqlalchemy import create_session_cls
 
-    Session = create_session_cls(config, scopefunc=flask._app_ctx_stack.__ident_func__)
+    Session = create_session_cls(config, scopefunc=flask._app_ctx_stack.__ident_func__)  # type: ignore
     session = Session()
 
     @app.teardown_appcontext

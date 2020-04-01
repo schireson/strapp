@@ -203,4 +203,3 @@ def test_double_submission_command():
     result = ClickRunner(group).invoke("foo", "--a", "woah")
 
     result.assert_successful()
-

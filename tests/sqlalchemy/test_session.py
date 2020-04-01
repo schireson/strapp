@@ -18,7 +18,7 @@ def test_create_session_dry_run():
 Base = declarative_base()
 
 
-class Foo(Base):
+class Foo(Base):  # type: ignore
     __tablename__ = "foo"
     id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True)
 

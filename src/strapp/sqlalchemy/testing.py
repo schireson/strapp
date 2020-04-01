@@ -1,6 +1,7 @@
-import sqlalchemy
 import functools
 from collections import namedtuple
+
+import sqlalchemy
 
 
 def assert_equals(instance, other, include=None, exclude=None):
@@ -17,7 +18,7 @@ def assert_equals(instance, other, include=None, exclude=None):
     other_eq = other
     if isinstance(other, type(instance)):
         other_eq = _collect_loaded_values(other, include=include, exclude=exclude)
-    assert instance_eq == other_eq
+    assert instance_eq == other_eq  # nosec
 
 
 def assert_equals_factory(include=None, exclude=None):

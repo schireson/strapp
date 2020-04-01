@@ -1,6 +1,7 @@
-from strapp.sqlalchemy.model_base import declarative_base
 import sqlalchemy
 import sqlalchemy.ext
+
+from strapp.sqlalchemy.model_base import declarative_base
 
 
 class Test_declarative_base:

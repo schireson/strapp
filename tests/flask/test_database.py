@@ -5,9 +5,8 @@ from strapp.flask import (
     inject_db,
     json_response,
     manage_session,
-    manage_session,
-    sqlalchemy_database,
     Route,
+    sqlalchemy_database,
 )
 
 config = {

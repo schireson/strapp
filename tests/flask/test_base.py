@@ -1,5 +1,6 @@
-import flask
 from unittest.mock import patch
+
+import flask
 
 from strapp.flask import BadRequest, create_app, default_error_handlers, Route
 

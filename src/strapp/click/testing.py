@@ -19,14 +19,14 @@ class ClickResult:
         """
         if self.result.exit_code != 0:
             print(self.result.output)
-        assert self.result.exit_code == 0
+        assert self.result.exit_code == 0  # nosec
 
     def assert_unsuccessful(self):
         """Assert the command executed successfully and print the command output if the assertion is false.
         """
         if self.result.exit_code == 0:
             print(self.result.output)
-        assert self.result.exit_code == 1
+        assert self.result.exit_code == 1  # nosec
 
     def __getattr__(self, attr):
         return getattr(self.result, attr)
