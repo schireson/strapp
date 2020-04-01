@@ -6,7 +6,6 @@ import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
 
-
 log = logging.getLogger(__name__)
 
 
@@ -38,29 +37,33 @@ def add_context(*, user: Optional[Dict] = None, extra: Optional[Dict[str, Any]] 
         extra: Add extra non-indexed key/value pairs to the event.
         **tags: Add indexed key/value pairs to the event.
 
-    Tags show up in sentry as tags/pills at the top of the issue to provide context. Furthermore
-    They're indexed, and are therefore searchable.
-    >>> with add_context(domain_model_id=4, report_type='foo'):
-    ...     # Captured sentry events, such as unhandled exceptions will have these attributes
-    ...     1 / 0
-    Traceback (most recent call last):
-      ...
-    ZeroDivisionError: division by zero
+    Examples:
+        Tags show up in sentry as tags/pills at the top of the issue to provide context. Furthermore
+        They're indexed, and are therefore searchable.
 
-    Sentry has an explicit notion of a "user", which is handled separately from other context.
-    >>> with add_context(user={id: 1}):
-    ...     1 / 0
-    Traceback (most recent call last):
-      ...
-    ZeroDivisionError: division by zero
+        >>> with add_context(domain_model_id=4, report_type='foo'):
+        ...     # Captured sentry events, such as unhandled exceptions will have these attributes
+        ...     1 / 0
+        Traceback (most recent call last):
+          ...
+        ZeroDivisionError: division by zero
 
-    Extras show up in sentry as extra, non-critical data towards the botton of the issue. They
-    just provide additional context, and are not indexed.
-    >>> with add_context(extra={'json': 1}):
-    ...     1 / 0
-    Traceback (most recent call last):
-      ...
-    ZeroDivisionError: division by zero
+        Sentry has an explicit notion of a "user", which is handled separately from other context.
+
+        >>> with add_context(user={id: 1}):
+        ...     1 / 0
+        Traceback (most recent call last):
+          ...
+        ZeroDivisionError: division by zero
+
+        Extras show up in sentry as extra, non-critical data towards the botton of the issue. They
+        just provide additional context, and are not indexed.
+
+        >>> with add_context(extra={'json': 1}):
+        ...     1 / 0
+        Traceback (most recent call last):
+          ...
+        ZeroDivisionError: division by zero
     """
     with sentry_sdk.push_scope() as scope:
         for name, value in tags.items():

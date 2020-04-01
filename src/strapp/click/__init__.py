@@ -1,5 +1,6 @@
 # flake8: noqa
 import click
+
 from strapp.click.resolver import Resolver
 
 option = click.option
@@ -12,3 +13,5 @@ except ImportError:  # pragma: nocover
 else:
     pytest.register_assert_rewrite("strapp.click.testing")
     del pytest
+finally:
+    from strapp.click import testing

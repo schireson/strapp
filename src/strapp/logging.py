@@ -1,5 +1,9 @@
 import logging
-from setuplog import setup_logging  # noqa
+
+DEBUG = logging.DEBUG
+INFO = logging.INFO
+WARNING = logging.WARNING
+ERROR = logging.ERROR
 
 
 _log = logging.getLogger(__name__)
@@ -15,6 +19,7 @@ def package_verbosity_factory(*definitions):
         This states that: `urllib3` should start at INFO logs by default, then only increase to
         DEBUG at 3 verbosity (i.e. -vvv). And that `sqlalchemy` should start at WARNING, then
         INFO (at -v), and DEBUG (at -vv, -vvv, etc)
+
         >>> package_verbosity = package_verbosity_factory(
         ...     ("urllib3", logging.INFO, logging.INFO, logging.INFO, logging.DEBUG),
         ...     ("sqlalchemy", logging.WARNING, logging.INFO, logging.DEBUG),
@@ -31,6 +36,7 @@ def package_verbosity_factory(*definitions):
         Omitting the log level progression entirely isn't really an intended usecase, but
         the returned callable accepts a `default` arg, which can be used to control the
         behavior in this case. It defaults to `logging.INFO`
+
         >>> package_verbosity = package_verbosity_factory(["urllib3"])
         >>> package_verbosity(0)
         {'urllib3': 20}

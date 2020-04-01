@@ -1,5 +1,5 @@
-import sqlalchemy
 import pytest
+import sqlalchemy
 
 from strapp.sqlalchemy.model_base import declarative_base
 from strapp.sqlalchemy.testing import assert_equals, assert_equals_factory
