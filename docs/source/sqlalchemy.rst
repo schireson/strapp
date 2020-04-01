@@ -43,10 +43,10 @@ and use that to hook up their database to the flask app.
    :caption: wsgi.py
 
    from configly import Config
-   from strapp.flask import database_callback, sqlalchemy_database
+   from strapp.flask import callback_factory, sqlalchemy_database
 
    config = Configly.from_yaml('config.yml')
-   callback = database_callback(sqlalchemy_database, config.database)
+   callback = callback_factory(sqlalchemy_database, config.database)
    app = create_app(callbacks=[callback])
 
 

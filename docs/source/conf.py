@@ -35,6 +35,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "sqlalchemy": ("https://docs.sqlalchemy.org/en/13/", None),
     "click": ("https://click.palletsprojects.com/en/7.x/", None),
+    "flask": ("https://flask.palletsprojects.com/en/1.1.x/", None),
 }
 
 autoclass_content = "both"

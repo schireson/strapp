@@ -1,12 +1,14 @@
 from strapp.flask import (
+    callback_factory,
     create_app,
-    database_callback,
-    sqlalchemy_database,
+    inject,
     inject_db,
     json_response,
+    manage_session,
+    manage_session,
+    sqlalchemy_database,
     Route,
 )
-
 
 config = {
     "drivername": "sqlite",
@@ -21,7 +23,7 @@ def test_database_injection():
 
     app = create_app(
         routes=[Route.to("GET", "/foo", view)],
-        callbacks=[database_callback(sqlalchemy_database, config)],
+        callbacks=[callback_factory(sqlalchemy_database, config, key="db")],
     )
     with app.test_client() as client:
         response = client.get("/foo")
@@ -43,7 +45,7 @@ def test_database_error_recovery():
 
     app = create_app(
         routes=[Route.to("GET", "/foo", view), Route.to("GET", "/bar", view2)],
-        callbacks=[database_callback(sqlalchemy_database, config)],
+        callbacks=[callback_factory(sqlalchemy_database, config, key="db")],
     )
     with app.test_client() as client:
         response = client.get("/foo")
@@ -69,7 +71,7 @@ def test_database_commit_on_success():
 
     app = create_app(
         routes=[Route.to("GET", "/foo", view), Route.to("GET", "/bar", view2)],
-        callbacks=[database_callback(sqlalchemy_database, config)],
+        callbacks=[callback_factory(sqlalchemy_database, config, key="db")],
     )
     with app.test_client() as client:
         response = client.get("/foo")
@@ -86,12 +88,48 @@ def test_changed_status_code():
     def view():
         return 5
 
-    app = create_app(
-        routes=[Route.to("GET", "/foo", view)],
-        callbacks=[database_callback(sqlalchemy_database, config)],
-    )
+    app = create_app(routes=[Route.to("GET", "/foo", view)],)
     with app.test_client() as client:
         response = client.get("/foo")
 
     assert response.json == 5
     assert response.status_code == 201
+
+
+def test_inject_commit_on_success():
+    @json_response
+    @inject(db=manage_session(commit_on_success=True))
+    def view(db):
+        db.execute("CREATE TABLE foo (id INTEGER);")
+        db.execute("INSERT INTO foo (id) VALUES (9);")
+
+    @json_response
+    @inject_db
+    def view2(db):
+        return [row.id for row in db.execute("select id from foo;").fetchall()]
+
+    app = create_app(
+        routes=[Route.to("GET", "/foo", view), Route.to("GET", "/bar", view2)],
+        callbacks=[callback_factory(sqlalchemy_database, config, key="db")],
+    )
+    with app.test_client() as client:
+        response = client.get("/foo")
+    assert response.status_code == 200
+
+    with app.test_client() as client:
+        response = client.get("/bar")
+    assert response.status_code == 200
+    assert response.json == [9]
+
+
+def test_inject_invalid():
+    @json_response
+    @inject(db=manage_session(commit_on_success=True))
+    def view(db):
+        pass
+
+    app = create_app(routes=[Route.to("GET", "/foo", view)])
+    with app.test_client() as client:
+        response = client.get("/foo")
+    assert response.status_code == 500
+    assert response.json["error"] == "(ValueError) db is not registered in flask's extensions."

@@ -55,6 +55,7 @@ def create_app(
 
     Examples:
         Registering routes:
+
         >>> routes = [
         ...     Route.to('GET', '/four', lambda: 4),
         ...     ('GET', '/five', lambda: 5),
@@ -65,10 +66,12 @@ def create_app(
         <Flask '...'>
 
         Specifying config
+
         >>> create_app(config={'FLASK_DEBUG': True})
         <Flask '...'>
 
         Specifying registering non-default error handlers
+
         >>> from strapp.flask import handle_exception, BadRequest
         >>> error_handlers = [
         ...     handle_exception(BadRequest),
@@ -78,14 +81,16 @@ def create_app(
         <Flask '...'>
 
         Specifying flask construction arguments.
+
         >>> create_app(flask_args={'template_folder': '.'})
         <Flask '...'>
 
         Adding non-plugin, things which require access to the app, such as registering a database.
-        >>> from strapp.flask import database_callback, sqlalchemy_database
+
+        >>> from strapp.flask import callback_factory, sqlalchemy_database
         >>> config = {'drivername': 'sqlite'}
         >>> callbacks = [
-        ...     database_callback(sqlalchemy_database, config)
+        ...     callback_factory(sqlalchemy_database, config, key='db')
         ... ]
         >>> create_app(callbacks=callbacks)
         <Flask '...'>

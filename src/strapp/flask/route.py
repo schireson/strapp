@@ -41,6 +41,8 @@ class Route:
 
     @classmethod
     def to(cls, method, path, view, endpoint=None, **kwargs):
+        """Route a method+path to a view function.
+        """
         return cls([method], path, view, endpoint_=endpoint, kwargs=kwargs)
 
     @classmethod
