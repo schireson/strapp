@@ -1,3 +1,5 @@
+![CircleCI](https://img.shields.io/circleci/build/gh/schireson/strapp/master) [![codecov](https://codecov.io/gh/schireson/strapp/branch/master/graph/badge.svg)](https://codecov.io/gh/schireson/strapp) [![Documentation Status](https://readthedocs.org/projects/strapp/badge/?version=latest)](https://strapp.readthedocs.io/en/latest/?badge=latest)
+
 # Strapp
 
 A mildly opinionated library used to boot**str**ap **app**s. Its primary use is to commonize
