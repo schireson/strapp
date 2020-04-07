@@ -9,6 +9,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
+dataclasses = { version = "*", optional = true, python = "~3.6" }
 click = { version = "*", optional = true }
 flask = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
@@ -27,16 +28,11 @@ pytest = "^5.2"
 pytest-mock-resources = "*"
 sqlalchemy-stubs = "*"
 
-[[tool.poetry.source]]
-name = 'schireson'
-url = "https://artifactory.schireson.com/artifactory/api/pypi/pypi/simple"
-
 [tool.poetry.extras]
-click = ["click"]
-logging = ["setuplog"]
+click = ["click", "dataclasses"]
 sqlalchemy = ["sqlalchemy"]
 sentry = ["sentry-sdk"]
-flask = ["flask", "flask_reverse_proxy"]
+flask = ["flask", "flask_reverse_proxy", "dataclasses"]
 
 [tool.black]
 line_length = 100
