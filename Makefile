@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := test
 
 install:
-	poetry install
+	poetry install -E click -E sqlalchemy -E sentry -E flask
 
 build:
 	poetry build
