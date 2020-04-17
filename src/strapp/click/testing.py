@@ -18,6 +18,9 @@ class ClickResult:
         """Assert the command executed successfully and print the command output if the assertion is false.
         """
         if self.result.exit_code != 0:
+            if self.result.exception:
+                print(self.result.exception)
+
             print(self.result.output)
         assert self.result.exit_code == 0  # nosec
 

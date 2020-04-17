@@ -139,6 +139,26 @@ def test_bad_assertion_successful():
         result.assert_successful()
 
 
+def test_bad_assertion_prints_exception(capsys):
+    resolver = Resolver()
+
+    @resolver.group()
+    def foo():
+        pass
+
+    @resolver.command(foo)
+    def command():
+        raise Exception("f\noo")
+
+    result = (
+        ClickRunner(foo).patch("strapp.click.resolver.sentry_sdk", new=sentry_sdk).invoke("command")
+    )
+
+    with pytest.raises(AssertionError) as e:
+        result.assert_successful()
+    assert "Exception: f\noo" in str(capsys.readouterr().out)
+
+
 def test_bad_assertion_unsuccessful():
     resolver = Resolver()
 
