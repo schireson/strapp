@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.2.1"
+version = "0.2.2"
 description = ""
 authors = []
 packages = [
@@ -9,7 +9,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
-dataclasses = { version = "*", optional = true, python = "~3.6" }
+dataclasses = { version = "*", optional = true, python = ">=3.6, <3.7" }
 click = { version = "*", optional = true }
 flask = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
