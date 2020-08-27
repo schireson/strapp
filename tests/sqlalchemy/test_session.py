@@ -75,6 +75,19 @@ def test_log_session_state_deleted(caplog):
     assert caplog.records[1].message == "DELETED: Foo(id=1)"
 
 
+def test_engine_kwargs(caplog):
+    caplog.set_level("DEBUG")
+
+    session = create_session({"drivername": "sqlite"}, dry_run=True, verbosity=3, engine_kwargs={'pool_pre_ping': True})
+    Base.metadata.create_all(bind=session.connection())
+
+    foo_new = Foo(id=1)
+    session.add(foo_new)
+
+    session.commit()
+    assert len(caplog.records) == 2
+
+
 def test_DryRunSession_commit(caplog):
     caplog.set_level("DEBUG")
 

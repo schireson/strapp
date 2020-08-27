@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "strapp"
-version = "0.2.2"
+version = "0.2.3"
 description = ""
 authors = []
 packages = [
     { include = "strapp", from = "src" },
 ]
+include = ["src/strapp/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
