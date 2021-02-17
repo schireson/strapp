@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def setup_sentry(
-    dsn, environment=None, service_name=None, level="WARNING", breadcrumb_level="INFO"
+    dsn, environment=None, service_name=None, level="WARNING", breadcrumb_level="INFO", **kwargs,
 ):
     """Initialize sentry.
 
@@ -25,6 +25,7 @@ def setup_sentry(
         attach_stacktrace=True,
         environment=environment,
         server_name=service_name,
+        **kwargs,
     )
 
 
