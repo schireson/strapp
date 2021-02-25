@@ -1,10 +1,11 @@
 from datetime import datetime
+from typing import Optional
 
 import sqlalchemy
 from sqlalchemy.ext import declarative
 
 
-def declarative_base(base=None, *, repr=True):
+def declarative_base(base: Optional[declarative.DeclarativeMeta] = None, *, repr=True):
     """Define a declarative base class.
 
     Args:
