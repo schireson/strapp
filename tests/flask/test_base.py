@@ -72,3 +72,9 @@ def test_route_registered():
 
 def test_non_proxied():
     create_app([], proxied=False)
+
+
+def test_config_applied():
+    app = create_app(config={"foo": "bar"})
+
+    assert app.config["foo"] == "bar"
