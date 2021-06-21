@@ -102,7 +102,7 @@ def create_app(
     callbacks = callbacks or []
 
     app = flask.Flask(__name__, **flask_args)
-    app.config.update()
+    app.config.update(**(config or {}))
 
     register_error_handlers(app, error_handlers)
     register_routes(app, routes)
