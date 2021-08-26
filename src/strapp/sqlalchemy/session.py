@@ -7,7 +7,11 @@ log = logging.getLogger(__name__)
 
 
 def create_session_cls(config: Mapping, *, scopefunc=None, engine_kwargs: Optional[Dict] = None):
-    url = sqlalchemy.engine.url.URL(**dict(config))
+    url_cls = sqlalchemy.engine.url.URL
+    if hasattr(url_cls, "create"):
+        url_cls = url_cls.create
+
+    url = url_cls(**dict(config))
     engine = sqlalchemy.create_engine(url, **(engine_kwargs or {}))
 
     return sqlalchemy.orm.scoping.scoped_session(
