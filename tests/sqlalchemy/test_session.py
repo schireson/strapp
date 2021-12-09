@@ -78,7 +78,9 @@ def test_log_session_state_deleted(caplog):
 def test_engine_kwargs(caplog):
     caplog.set_level("DEBUG")
 
-    session = create_session({"drivername": "sqlite"}, dry_run=True, verbosity=3, engine_kwargs={'pool_pre_ping': True})
+    session = create_session(
+        {"drivername": "sqlite"}, dry_run=True, verbosity=3, engine_kwargs={"pool_pre_ping": True}
+    )
     Base.metadata.create_all(bind=session.connection())
 
     foo_new = Foo(id=1)
