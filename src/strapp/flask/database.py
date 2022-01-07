@@ -1,6 +1,7 @@
 from typing import Mapping
 
 import flask
+import werkzeug
 
 
 def sqlalchemy_database(app: flask.Flask, config: Mapping):
@@ -10,7 +11,12 @@ def sqlalchemy_database(app: flask.Flask, config: Mapping):
     """
     from strapp.sqlalchemy import create_session_cls
 
-    Session = create_session_cls(config, scopefunc=flask._app_ctx_stack.__ident_func__)  # type: ignore
+    if werkzeug.__version__.startswith("2.1"):
+        scopefunc = flask._app_ctx_stack.__ident_func__
+    else:
+        scopefunc = None
+
+    Session = create_session_cls(config, scopefunc=scopefunc)
     session = Session()
 
     @app.teardown_appcontext
