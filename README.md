@@ -11,24 +11,32 @@ opting into or out of specific strapp decisions and modules entirely optional.
 
 ## Package Highlights
 
-* [SQLAlchemy](https://strapp.readthedocs.io/latest/sqlalchemy.html)
-  * Session creation helper functions
-    * Opt-in "dry run" session feature
-  * Custom `declarative_base`
-    * Opt-in created_at/updated_at columns
-    * Opt-out `repr`able models
+- [SQLAlchemy](https://strapp.readthedocs.io/latest/sqlalchemy.html)
 
-* [Click](https://strapp.readthedocs.io/latest/click.html)
-  * Context "Resolver"
-* [Flask](https://strapp.readthedocs.io/latest/flask.html)
-  * Non-decorator based route registration pattern (removes circular import issues)
-  * Opt-in error handlers
-  * Opt-in database handling
-* [Logging](https://strapp.readthedocs.io/latest/logging.html)
-  * Logging verbosity helper
-* [Sentry](https://strapp.readthedocs.io/latest/sentry.html)
-  * Setup helper
-  * Context helper
+  - Session creation helper functions
+    - Opt-in "dry run" session feature
+  - Custom `declarative_base`
+
+    - Opt-in created_at/updated_at columns
+    - Opt-out `repr`able models
+    - For type safety, utilize the mypy plugin
+
+      ```toml
+      [tool.mypy]
+      plugins = 'strapp.sqlalchemy.mypy'
+      ```
+
+- [Click](https://strapp.readthedocs.io/latest/click.html)
+  - Context "Resolver"
+- [Flask](https://strapp.readthedocs.io/latest/flask.html)
+  - Non-decorator based route registration pattern (removes circular import issues)
+  - Opt-in error handlers
+  - Opt-in database handling
+- [Logging](https://strapp.readthedocs.io/latest/logging.html)
+  - Logging verbosity helper
+- [Sentry](https://strapp.readthedocs.io/latest/sentry.html)
+  - Setup helper
+  - Context helper
 
 ## Optional Integrations
 
