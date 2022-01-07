@@ -3,10 +3,15 @@ import sqlalchemy.ext
 
 from strapp.sqlalchemy.model_base import declarative_base
 
+try:
+    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
+except ImportError:
+    from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
+
 
 class Test_declarative_base:
     def test_self_declarative_base(self):
-        base = sqlalchemy.ext.declarative.declarative_base()
+        base = sqlalchemy_declarative_base()
         Base = declarative_base(base, repr=False)
 
         class Foo(Base):

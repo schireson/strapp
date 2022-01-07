@@ -9,7 +9,7 @@ from flask import Response
 try:
     import sentry_sdk
 except ImportError:  # pragma: nocover
-    sentry_sdk = None
+    sentry_sdk = None  # type: ignore
 
 
 log = logging.getLogger(__name__)

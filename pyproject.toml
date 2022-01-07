@@ -25,12 +25,16 @@ black = "^19.10b0"
 coverage = "*"
 flake8 = "^3.7.9"
 isort = "^4.3.21"
-mypy = "^0.740"
+mypy = "^0.930"
 pydocstyle = "^4.0.1"
-pytest = "^5.2"
+pytest = "^6.0"
 pytest-mock-resources = "*"
 sqlalchemy-stubs = "*"
 requests = "^2.26.0"
+pytest-alembic = ">=0.6.0"
+types-dataclasses = "^0.6.2"
+types-requests = "^2.26.3"
+types-contextvars = "^2.4.0"
 
 [tool.poetry.extras]
 click = ["click", "dataclasses"]

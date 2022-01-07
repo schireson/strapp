@@ -154,7 +154,7 @@ def test_bad_assertion_prints_exception(capsys):
         ClickRunner(foo).patch("strapp.click.resolver.sentry_sdk", new=sentry_sdk).invoke("command")
     )
 
-    with pytest.raises(AssertionError) as e:
+    with pytest.raises(AssertionError):
         result.assert_successful()
     assert "Exception: f\noo" in str(capsys.readouterr().out)
 

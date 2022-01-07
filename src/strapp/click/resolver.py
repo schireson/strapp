@@ -7,7 +7,7 @@ import click
 try:
     import sentry_sdk
 except ImportError:  # pragma: nocover
-    sentry_sdk = None
+    sentry_sdk = None  # type: ignore
 
 
 class Resolver:

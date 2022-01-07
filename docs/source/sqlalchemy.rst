@@ -11,6 +11,25 @@ which are very commonly included on a majority of tables, :code:`created_at` and
     :members: declarative_base
 
 
+Mypy
+~~~~
+You may encounter typing-related issues such as:
+
+.. code-block:: bash
+   
+   error: Variable "models.Base" is not valid as a type
+   error: Invalid base class "Base"
+
+
+Because of the dynamically created type, a mypy plugin is required. An example
+``pyproject.toml`` file enabling the plugin would look like:
+
+.. code-block:: toml
+
+   [tool.mypy]
+   plugins = ["strapp.sqlalchemy.mypy"]
+
+
 Session
 -------
 
