@@ -12,6 +12,7 @@ Welcome to Strapp's documentation!
 
    Logging <logging>
    Sentry <sentry>
+   Datadog <datadog>
 
    Contributing <contributing>
 
