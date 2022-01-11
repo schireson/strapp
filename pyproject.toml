@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.2.10"
+version = "0.3.0"
 description = ""
 authors = []
 packages = [
@@ -18,6 +18,8 @@ sqlalchemy = { version = "*", optional = true }
 flask_reverse_proxy = { version = "*", optional = true }
 setuplog = {version = "^0.2.2", optional = true}
 backoff = {version = "^1.11.1", optional = true}
+configly = {version = "*", optional = true}
+datadog = {version = "^0.43.0", optional = true}
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -42,6 +44,7 @@ sqlalchemy = ["sqlalchemy"]
 sentry = ["sentry-sdk"]
 flask = ["flask", "flask_reverse_proxy", "dataclasses"]
 http = ["backoff", "setuplog"]
+datadog = ["datadog", "configly"]
 
 [tool.black]
 line_length = 100
