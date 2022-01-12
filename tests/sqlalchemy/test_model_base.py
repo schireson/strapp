@@ -4,7 +4,7 @@ import sqlalchemy.ext
 from strapp.sqlalchemy.model_base import declarative_base
 
 try:
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
+    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base  # type: ignore
 except ImportError:
     from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
 

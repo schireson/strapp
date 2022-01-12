@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.3.1"
+version = "0.3.2"
 description = ""
 authors = []
 packages = [
@@ -22,7 +22,7 @@ flask_reverse_proxy = { version = "*", optional = true }
 setuplog = {version = "^0.2.2", optional = true}
 backoff = {version = "^1.11.1", optional = true}
 configly = {version = "*", optional = true}
-datadog = {version = "^0.43.0", optional = true}
+datadog = {version = "*", optional = true}
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -34,6 +34,7 @@ mypy = "^0.930"
 pydocstyle = "^4.0.1"
 pytest = "^6.0"
 pytest-mock-resources = "*"
+sqlalchemy = ">=1.4"
 sqlalchemy-stubs = "*"
 requests = "^2.26.0"
 pytest-alembic = ">=0.6.0"
