@@ -2,9 +2,14 @@ import abc
 import contextlib
 import socket
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union, TypeVar
 
 import backoff
+
+try:
+    from typing import ParamSpec
+except ImportError:
+    from typing_extensions import ParamSpec
 
 
 def from_field(mapper, *fields):
@@ -176,6 +181,10 @@ class PreparedRequest(Request):
         return replace(self)
 
 
+P = ParamSpec("P")
+R = TypeVar("R")
+
+
 @contextlib.contextmanager
 def managed_request(retries=6, max_time=60 * 5, base=2, factor=3, exceptions=()):
     """Intercept all outgoing requests so they can be safety-wrapped.
@@ -206,7 +215,7 @@ def managed_request(retries=6, max_time=60 * 5, base=2, factor=3, exceptions=())
         base=base,
         factor=factor,
     )
-    def request_fn(fn, *args, **kwargs):
+    def request_fn(fn: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
         return fn(*args, **kwargs)
 
     try:
