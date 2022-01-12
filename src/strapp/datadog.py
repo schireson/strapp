@@ -2,22 +2,40 @@ import contextlib
 import datetime
 import functools
 import logging
+from typing import Any, Dict, Optional, TYPE_CHECKING, Union
 
 import datadog
-from configly import Config
+
+if TYPE_CHECKING:
+    from configly import Config
 
 log = logging.getLogger(__name__)
 
 
-def setup(config: Config):
-    if config.datadog.app_key is not None and config.datadog.api_key is not None:
+def setup(
+    config: Union[Config, Dict[str, Any]],
+    *,
+    environment: Optional[str] = None,
+    namespace: Optional[str] = None,
+):
+    app_key = config.get("app_key")
+    api_key = config.get("app_key")
+    statsd_host = config.get("statsd_host")
+    statsd_port = config.get("statsd_port")
+
+    if app_key is not None and api_key is not None:
+        constant_tags = []
+
+        if environment:
+            constant_tags.append(f"environment:{environment}")
+
         datadog.initialize(
-            api_key=config.datadog.api_key,
-            app_key=config.datadog.app_key,
-            statsd_host=config.datadog.statsd_host,
-            statsd_port=config.datadog.statsd_port,
-            statsd_constant_tags=[f"environment:{config.environment}"],
-            statsd_namespace="media_activation",
+            api_key=api_key,
+            app_key=app_key,
+            statsd_host=statsd_host,
+            statsd_port=statsd_port,
+            statsd_constant_tags=constant_tags,
+            statsd_namespace=namespace,
             hostname_from_config=False,
         )
 

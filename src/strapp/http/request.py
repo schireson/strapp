@@ -2,7 +2,7 @@ import abc
 import contextlib
 import socket
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union, TypeVar
+from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, Union
 
 import backoff
 
