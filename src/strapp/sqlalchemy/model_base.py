@@ -5,8 +5,8 @@ from typing import Optional, Type
 import sqlalchemy
 
 try:
-    from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
+    from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta  # type: ignore
+    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base  # type: ignore
 except ImportError:
     from sqlalchemy.ext.declarative import DeclarativeMeta as SQLAlchemyDeclarativeMeta
     from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
@@ -73,7 +73,7 @@ def declarative_base(
     if base is None:
         base: Type[SQLAlchemyDeclarativeMeta] = sqlalchemy_declarative_base(metaclass=DeclarativeMeta, metadata=metadata)  # type: ignore
 
-    class Base(base):
+    class Base(base):  # type: ignore
         __abstract__ = True
 
         if repr:
@@ -87,7 +87,7 @@ def declarative_base(
             # requiring use of `setattr`.
             _set_attrs(cls, created_at=created_at, updated_at=updated_at, op=setattr)
 
-    return Base  # type: ignore
+    return Base
 
 
 def _set_attrs(dict_, created_at=False, updated_at=False, op=setattr):

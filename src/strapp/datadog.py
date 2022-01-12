@@ -2,12 +2,11 @@ import contextlib
 import datetime
 import functools
 import logging
-from typing import Any, Dict, Optional, TYPE_CHECKING, Union
+from typing import Any, Dict, Optional, Union
 
 import datadog
 
-if TYPE_CHECKING:
-    from configly import Config
+from configly import Config
 
 log = logging.getLogger(__name__)
 

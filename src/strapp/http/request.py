@@ -7,7 +7,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, Union
 import backoff
 
 try:
-    from typing import ParamSpec
+    from typing import ParamSpec  # type: ignore
 except ImportError:
     from typing_extensions import ParamSpec
 
