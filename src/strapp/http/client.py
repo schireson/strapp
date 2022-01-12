@@ -1,4 +1,4 @@
-import json
+from json import JSONDecodeError
 from pprint import pformat
 
 import backoff
@@ -70,13 +70,19 @@ class HttpClient:
         method,
         url="",
         use_base_url=True,
+        log_request_body=True,
         log_response_body=False,
-        timeout=20,
         retries=4,
         backoff_base=2,
         backoff_factor=3,
         error_handler=None,
-        **kwargs,
+        headers=None,
+        params=None,
+        data=None,
+        files=None,
+        auth=None,
+        timeout=20,
+        json=None,
     ):
         # If a 4XX error is raised - give up immediately
         # Otherwise retry the request a number of times while backing off
@@ -95,7 +101,17 @@ class HttpClient:
             factor=backoff_factor,
         )
         def _request(fq_url):
-            response = self.session.request(method, fq_url, timeout=timeout, **kwargs)
+            response = self.session.request(
+                method,
+                fq_url,
+                headers=headers,
+                params=params,
+                data=data,
+                files=files,
+                auth=auth,
+                timeout=timeout,
+                json=json,
+            )
             try:
                 response.raise_for_status()
             except requests.exceptions.HTTPError as e:
@@ -109,10 +125,10 @@ class HttpClient:
             segments = [self._base_url, url]
             url = "/".join([segment for segment in segments if segment])
 
-        pparams = pformat(kwargs.get("params", ""))
+        pparams = pformat(params or "")
         log.debug("Request: %s %s %s", method, url, pparams)
-        if "json" in kwargs:
-            log.debug("Request Body:\n%s", pformat(kwargs["json"]))
+        if log_request_body and json:
+            log.debug("Request Body:\n%s", pformat(json))
 
         try:
             response = _request(url)
@@ -120,7 +136,7 @@ class HttpClient:
             if log_response_body:
                 try:
                     body = response.json()
-                except json.decoder.JSONDecodeError:
+                except JSONDecodeError:
                     body = response.text
                 else:
                     body = pformat(body)
