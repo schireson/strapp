@@ -2,7 +2,7 @@ import abc
 import contextlib
 import socket
 from dataclasses import dataclass, replace
-from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar, Union
+from typing import Any, Callable, Dict, Generic, List, Optional, Tuple, TypeVar, Union
 
 import backoff
 
@@ -141,18 +141,21 @@ def flatten(mapper):
     return decorator
 
 
-def noop_mapper(response):
+T = TypeVar("T")
+
+
+def noop_mapper(response: T) -> T:
     return response
 
 
 @dataclass
-class Request(metaclass=abc.ABCMeta):
-    def prepare(self) -> "PreparedRequest":
+class Request(Generic[T], metaclass=abc.ABCMeta):
+    def prepare(self) -> "PreparedRequest[T]":
         """Return a prepared request."""
 
 
 @dataclass
-class PreparedRequest(Request):
+class PreparedRequest(Request[T]):
     """The static definition of what it takes to make a request."""
 
     url: str
@@ -163,7 +166,7 @@ class PreparedRequest(Request):
     files: Optional[dict] = None
     params: Optional[dict] = None
     headers: Optional[dict] = None
-    response_mapper: Callable = noop_mapper
+    response_mapper: Callable[..., T] = noop_mapper
     map_with_request: bool = False
     is_paginated: bool = True
     extra: Optional[dict] = None
@@ -172,7 +175,7 @@ class PreparedRequest(Request):
     # A timeout of `0` is meant to indicate an explicit lack of a timeout i.e. infinite.
     timeout: Optional[int] = None
 
-    def prepare(self) -> "PreparedRequest":
+    def prepare(self) -> "PreparedRequest[T]":
         """Produce an identical `PreparedRequest` from the existing one.
 
         In particular, this can be useful to instantiate a specific request directly

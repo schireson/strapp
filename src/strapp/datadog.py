@@ -5,7 +5,6 @@ import logging
 from typing import Any, Dict, Optional, Union
 
 import datadog
-
 from configly import Config
 
 log = logging.getLogger(__name__)

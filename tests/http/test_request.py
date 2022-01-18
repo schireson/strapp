@@ -14,6 +14,7 @@ from strapp.http.request import (
     noop_mapper,
     PreparedRequest,
     Request,
+    T,
 )
 from tests import FakeHttpClient
 
@@ -125,3 +126,27 @@ class Test_Request:
         response = client.request(FakeRequest(response_mapper=flatten(noop_mapper)))
 
         assert response == ["h", "e", "l", "l", "o"]
+
+
+def test_prepared_request_typing(responses):
+    @dataclass
+    class Bar:
+        id: int
+
+    class Foo(Request[Bar]):
+        def prepare(self) -> PreparedRequest[Bar]:
+            return PreparedRequest(url="http://wat", response_mapper=Bar)
+
+    class Client:
+        def request(self, request: Request[T]) -> T:
+            prepared_request = request.prepare()
+            response = requests.get(prepared_request.url)
+            return prepared_request.response_mapper(response.json())
+
+    responses.add(responses.GET, "http://wat", json=1)
+
+    client = Client()
+    request = Foo()
+    bar = client.request(request)
+
+    assert bar.id == 1
