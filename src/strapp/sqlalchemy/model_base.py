@@ -71,9 +71,11 @@ def declarative_base(
         ...     id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True)
     """
     if base is None:
-        base: Type[SQLAlchemyDeclarativeMeta] = sqlalchemy_declarative_base(metaclass=DeclarativeMeta, metadata=metadata)  # type: ignore
+        base_: Type[SQLAlchemyDeclarativeMeta] = sqlalchemy_declarative_base(metaclass=DeclarativeMeta, metadata=metadata)
+    else:
+        base_ = base
 
-    class Base(base):  # type: ignore
+    class Base(base_):  # type: ignore
         __abstract__ = True
 
         if repr:
