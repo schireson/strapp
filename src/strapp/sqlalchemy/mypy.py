@@ -1,9 +1,38 @@
-from typing import Type
+from datetime import datetime
+from typing import Callable, Optional, Type
 
-from mypy.mro import calculate_mro, MroError
-from mypy.nodes import Block, ClassDef, GDEF, SymbolTable, SymbolTableNode, TypeInfo
-from mypy.plugin import DynamicClassDefContext, Plugin
-from mypy.types import Instance
+import sqlalchemy.ext.mypy.apply
+import sqlalchemy.ext.mypy.decl_class
+import sqlalchemy.ext.mypy.plugin
+import sqlalchemy.ext.mypy.util
+import sqlalchemy.orm
+from mypy.nodes import (
+    ArgKind,
+    AssignmentStmt,
+    CallExpr,
+    MDEF,
+    MemberExpr,
+    NameExpr,
+    SymbolTableNode,
+    TypeInfo,
+    Var,
+)
+from mypy.plugin import ClassDefContext, DynamicClassDefContext, Plugin
+from mypy.types import get_proper_type
+
+
+class CreatedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    created_at: sqlalchemy.orm.Mapped[datetime]
+
+
+class UpdatedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    updated_at: sqlalchemy.orm.Mapped[datetime]
 
 
 class StrappSqlalchemyPlugin(Plugin):
@@ -12,28 +41,86 @@ class StrappSqlalchemyPlugin(Plugin):
             return _dynamic_class_hook
         return None
 
+    def get_base_class_hook(self, fullname: str) -> Optional[Callable[[ClassDefContext], None]]:
+        sym = self.lookup_fully_qualified(fullname)
+
+        if (
+            sym
+            and isinstance(sym.node, TypeInfo)
+            and sqlalchemy.ext.mypy.util.has_declarative_base(sym.node)
+        ):
+            return _base_cls_hook
+
+        return None
+
 
 def _dynamic_class_hook(ctx: DynamicClassDefContext) -> None:
-    """Generate a TypedBase class when the declarative_base() is called.
+    """Generate a TypedBase class when the declarative_base() is called."""
+    sqlalchemy.ext.mypy.plugin._dynamic_class_hook(ctx)  # type: ignore
+
+
+def _base_cls_hook(ctx: ClassDefContext) -> None:
+    api = ctx.api
+    cls = ctx.cls
+
+    if cls.keywords.get("created_at"):
+        make_dt_assignment(api, cls, "created_at", "CreatedAt")
+
+    if cls.keywords.get("updated_at"):
+        make_dt_assignment(api, cls, "updated_at", "UpdatedAt")
+
+    # Reexecute the default sqlalchemy handling code, if we get executed it seems
+    # to not run theirs(?)
+    sqlalchemy.ext.mypy.plugin._add_globals(ctx)  # type: ignore
+    sqlalchemy.ext.mypy.decl_class.scan_declarative_assignments_and_apply_types(ctx.cls, ctx.api)
+
+
+def make_dt_assignment(api, cls, name, base_cls_name):
+    """Create a stub column assignment for mypy/sqlalchemy to pick up.
+
+    Due to essentially no documentation on the mypy plugin setup, this is
+    pretty much all guesswork. It seems to end up working as far as attribute
+    access goes, but is not being picked for type checking on constructor
+    arguments, which must be part of the sqlalchemy plugin.
     """
-    cls = ClassDef(ctx.name, Block([]))
-    cls.fullname = ctx.api.qualified_name(ctx.name)
+    info = sqlalchemy.ext.mypy.util.info_for_cls(cls, api)
 
-    info = TypeInfo(SymbolTable(), cls, ctx.api.cur_mod_id)
-    cls.info = info
-    sym = ctx.api.lookup_fully_qualified_or_none("strapp.sqlalchemy.model_base.DeclarativeMeta")
-    assert sym is not None and isinstance(sym.node, TypeInfo)  # nosec
-    info.declared_metaclass = info.metaclass_type = Instance(sym.node, [])
+    type_ = get_proper_type(
+        api.named_type("sqlalchemy.orm.Mapped", [api.named_type("datetime.datetime")])
+    )
 
-    info.bases = [ctx.api.named_type("builtins.object")]
+    var = Var(name, type_)
+    var._fullname = f"{cls.fullname}.{name}"
+    var.info = info
 
-    try:
-        calculate_mro(info)
-    except MroError:
-        info.bases = [ctx.api.named_type("builtins.object")]
-        info.fallback_to_any = True
+    name_expr = NameExpr(name)
+    name_expr.node = var
 
-    ctx.api.add_symbol_table_node(ctx.name, SymbolTableNode(GDEF, info))
+    statement = AssignmentStmt(
+        lvalues=[name_expr],
+        rvalue=CallExpr(
+            callee=MemberExpr(expr=NameExpr("sqlalchemy"), name="Column"),
+            args=[
+                CallExpr(
+                    callee=MemberExpr(
+                        expr=MemberExpr(expr=NameExpr("sqlalchemy"), name="types"), name="DateTime",
+                    ),
+                    args=[],
+                    arg_kinds=[],
+                    arg_names=[],
+                )
+            ],
+            arg_kinds=[ArgKind.ARG_POS],
+            arg_names=[None],
+        ),
+        type=type_,
+    )
+    cls.defs.body.append(statement)
+
+    type_ = api.named_type(f"strapp.sqlalchemy.mypy.{base_cls_name}")
+    info.bases.append(type_)
+
+    info.names[name] = SymbolTableNode(kind=MDEF, node=var, plugin_generated=True)
 
 
 def plugin(_: str) -> Type[StrappSqlalchemyPlugin]:
