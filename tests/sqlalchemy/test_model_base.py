@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta, timezone
+
 import sqlalchemy
 import sqlalchemy.ext
 
@@ -118,3 +120,24 @@ class Test_declarative_base:
         db.add(foo)
         db.commit()
         assert foo.updated_at is not None
+
+    def test_deleted_at_set(self, db):
+        Base = declarative_base()
+
+        class Foo(Base, deleted_at=True):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
+
+        Base.metadata.create_all(bind=db.connection())
+        foo = Foo(id=1)
+        db.add(foo)
+        db.commit()
+        assert foo.deleted_at is None
+
+        now = datetime(2020, 1, 1, tzinfo=timezone(timedelta()))
+        foo.deleted_at = now
+        db.add(foo)
+        db.commit()
+
+        db_foo = db.query(Foo).one()
+        assert db_foo.deleted_at == now

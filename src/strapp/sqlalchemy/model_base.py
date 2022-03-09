@@ -33,25 +33,33 @@ def repr_fn(instance):
     return f"{class_name}({repr_attrs})"
 
 
-def __init_subclass__(cls, created_at=False, updated_at=False, **kwargs):
+def __init_subclass__(cls, created_at=False, updated_at=False, deleted_at=False, **kwargs):
     super(cls).__init_subclass__(**kwargs)
 
     # SQLAlchemy before 1.4.0 only work with the init_subclass strategy,
     # requiring use of `setattr`.
-    _set_attrs(cls, created_at=created_at, updated_at=updated_at, op=setattr)
+    _set_attrs(cls, created_at=created_at, updated_at=updated_at, deleted_at=deleted_at, op=setattr)
 
 
 class DeclarativeMeta(SQLAlchemyDeclarativeMeta):
     """Wrap sqlalchemy declarative meta to allow for extra kwargs."""
 
-    def __init__(cls, classname, bases, dict_, created_at=False, updated_at=False, **kwargs):
+    def __init__(
+        cls, classname, bases, dict_, created_at=False, updated_at=False, deleted_at=False, **kwargs
+    ):
         # SQLAlchemy 1.4.0 and later only work with the metaclass init strategy,
         # requiring use of `setitem`.
-        _set_attrs(dict_, created_at=created_at, updated_at=updated_at, op=operator.setitem)
+        _set_attrs(
+            dict_,
+            created_at=created_at,
+            updated_at=updated_at,
+            deleted_at=deleted_at,
+            op=operator.setitem,
+        )
         super().__init__(classname, bases, dict_)
 
     @classmethod
-    def __init_subclass__(cls, created_at=False, updated_at=False, **kwargs):
+    def __init_subclass__(cls, created_at=False, updated_at=False, deleted_at=False, **kwargs):
         super().__init_subclass__(**kwargs)
 
 
@@ -70,6 +78,7 @@ def declarative_base(
 
         * created_at: True/False
         * updated_at: True/False
+        * deleted_at: True/False
 
     Examples:
         >>> Base = declarative_base()
@@ -92,8 +101,8 @@ def declarative_base(
     return DeclarativeMeta("Base", (base_,), dict_)
 
 
-def _set_attrs(dict_, created_at=False, updated_at=False, op=setattr):
-    """Assign created_at/updated_at to the database model.
+def _set_attrs(dict_, created_at=False, updated_at=False, deleted_at=False, op=setattr):
+    """Assign created_at/updated_at/deleted_at to the database model.
 
     Different versions of SQLAlchemy require different strategies of setting
     these values in order for it to work correctly!
@@ -117,4 +126,11 @@ def _set_attrs(dict_, created_at=False, updated_at=False, op=setattr):
             sqlalchemy.Column(
                 sqlalchemy.types.DateTime(timezone=True), onupdate=datetime.utcnow, nullable=True,
             ),
+        )
+
+    if deleted_at:
+        op(
+            dict_,
+            "deleted_at",
+            sqlalchemy.Column(sqlalchemy.types.DateTime(timezone=True), nullable=True),
         )
