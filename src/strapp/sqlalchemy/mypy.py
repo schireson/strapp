@@ -35,6 +35,13 @@ class UpdatedAt:
     updated_at: sqlalchemy.orm.Mapped[datetime]
 
 
+class DeletedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    updated_at: sqlalchemy.orm.Mapped[datetime]
+
+
 class StrappSqlalchemyPlugin(Plugin):
     def get_dynamic_class_hook(self, fullname: str):
         if fullname == "strapp.sqlalchemy.model_base.declarative_base":
@@ -68,6 +75,9 @@ def _base_cls_hook(ctx: ClassDefContext) -> None:
 
     if cls.keywords.get("updated_at"):
         make_dt_assignment(api, cls, "updated_at", "UpdatedAt")
+
+    if cls.keywords.get("deleted_at"):
+        make_dt_assignment(api, cls, "deleted_at", "DeletedAt")
 
     # Reexecute the default sqlalchemy handling code, if we get executed it seems
     # to not run theirs(?)
