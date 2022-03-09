@@ -4,7 +4,7 @@ import sqlalchemy.ext
 from strapp.sqlalchemy.model_base import declarative_base
 
 try:
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base  # type: ignore
+    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
 except ImportError:
     from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
 
@@ -88,3 +88,33 @@ class Test_declarative_base:
         db.flush()
 
         assert repr(bar) == "Bar(foo_id=<not loaded>, id=1, updated_at=None)"
+
+    def test_created_at_set(self, db):
+        Base = declarative_base()
+
+        class Foo(Base, created_at=True):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+
+        Base.metadata.create_all(bind=db.connection())
+        foo = Foo(id=1)
+        db.add(foo)
+        db.commit()
+        assert foo.created_at is not None
+
+    def test_updated_at_set(self, db):
+        Base = declarative_base()
+
+        class Foo(Base, updated_at=True):
+            __tablename__ = "foo"
+            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+
+        Base.metadata.create_all(bind=db.connection())
+        foo = Foo(id=1)
+        db.add(foo)
+        db.commit()
+
+        foo.id = 2
+        db.add(foo)
+        db.commit()
+        assert foo.updated_at is not None

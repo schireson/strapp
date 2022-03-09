@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.3.4"
+version = "0.3.5"
 description = ""
 authors = []
 packages = [
@@ -64,6 +64,16 @@ order_by_type = false
 known_first_party = 'tests'
 known_standard_library = 'dataclasses'
 use_parentheses = true
+
+[tool.mypy]
+strict_optional = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+incremental = true
+plugins = [
+    'strapp.sqlalchemy.mypy',
+    'sqlalchemy.ext.mypy.plugin'
+]
 
 [build-system]
 requires = ["poetry>=0.12"]

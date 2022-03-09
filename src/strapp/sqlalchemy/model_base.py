@@ -5,8 +5,8 @@ from typing import Optional, Type
 import sqlalchemy
 
 try:
-    from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta  # type: ignore
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base  # type: ignore
+    from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta
+    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
 except ImportError:
     from sqlalchemy.ext.declarative import DeclarativeMeta as SQLAlchemyDeclarativeMeta
     from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
@@ -33,9 +33,16 @@ def repr_fn(instance):
     return f"{class_name}({repr_attrs})"
 
 
+def __init_subclass__(cls, created_at=False, updated_at=False, **kwargs):
+    super(cls).__init_subclass__(**kwargs)
+
+    # SQLAlchemy before 1.4.0 only work with the init_subclass strategy,
+    # requiring use of `setattr`.
+    _set_attrs(cls, created_at=created_at, updated_at=updated_at, op=setattr)
+
+
 class DeclarativeMeta(SQLAlchemyDeclarativeMeta):
-    """Wrap sqlalchemy declarative meta to allow for extra kwargs.
-    """
+    """Wrap sqlalchemy declarative meta to allow for extra kwargs."""
 
     def __init__(cls, classname, bases, dict_, created_at=False, updated_at=False, **kwargs):
         # SQLAlchemy 1.4.0 and later only work with the metaclass init strategy,
@@ -50,7 +57,7 @@ class DeclarativeMeta(SQLAlchemyDeclarativeMeta):
 
 def declarative_base(
     base: Optional[Type[SQLAlchemyDeclarativeMeta]] = None, *, repr=True, metadata=None
-) -> Type[DeclarativeMeta]:
+) -> DeclarativeMeta:
     """Define a declarative base class.
 
     Args:
@@ -71,25 +78,18 @@ def declarative_base(
         ...     id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True)
     """
     if base is None:
-        base_: Type[SQLAlchemyDeclarativeMeta] = sqlalchemy_declarative_base(metaclass=DeclarativeMeta, metadata=metadata)
+        base_: Type[SQLAlchemyDeclarativeMeta] = sqlalchemy_declarative_base(
+            metaclass=DeclarativeMeta, metadata=metadata
+        )
     else:
-        base_ = base
+        base_ = base  # type: ignore
 
-    class Base(base_):  # type: ignore
-        __abstract__ = True
+    dict_ = dict(__abstract__=True, __init_subclass__=__init_subclass__,)
 
-        if repr:
-            __repr__ = repr_fn
+    if repr:
+        dict_["__repr__"] = repr_fn
 
-        @classmethod
-        def __init_subclass__(cls, created_at=False, updated_at=False, **kwargs):
-            super().__init_subclass__(**kwargs)
-
-            # SQLAlchemy before 1.4.0 only work with the init_subclass strategy,
-            # requiring use of `setattr`.
-            _set_attrs(cls, created_at=created_at, updated_at=updated_at, op=setattr)
-
-    return Base
+    return DeclarativeMeta("Base", (base_,), dict_)
 
 
 def _set_attrs(dict_, created_at=False, updated_at=False, op=setattr):
