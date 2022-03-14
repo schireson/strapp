@@ -496,7 +496,7 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "requests", "xm
 
 [[package]]
 name = "pytest-alembic"
-version = "0.8.0"
+version = "0.8.1"
 description = "A pytest plugin for verifying alembic migrations."
 category = "dev"
 optional = false
@@ -613,7 +613,7 @@ tornado = ["tornado (>=5)"]
 
 [[package]]
 name = "setuplog"
-version = "0.2.3"
+version = "0.3.0"
 description = ""
 category = "main"
 optional = true
@@ -742,7 +742,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-requests"
-version = "2.27.11"
+version = "2.27.12"
 description = "Typing stubs for requests"
 category = "dev"
 optional = false
@@ -753,7 +753,7 @@ types-urllib3 = "<1.27"
 
 [[package]]
 name = "types-urllib3"
-version = "1.26.10"
+version = "1.26.11"
 description = "Typing stubs for urllib3"
 category = "dev"
 optional = false
@@ -817,7 +817,7 @@ sqlalchemy = ["sqlalchemy"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "713f3256abf00e23aff0a80bf2d942e0cde939b0ddc1e95d6bf556bf26ffbcba"
+content-hash = "9397c88c9833417edf3a1e5af107b92323bac1888ced9c44c84cdb2f921850a2"
 
 [metadata.files]
 alembic = [
@@ -1170,8 +1170,8 @@ pytest = [
     {file = "pytest-6.2.5.tar.gz", hash = "sha256:131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89"},
 ]
 pytest-alembic = [
-    {file = "pytest-alembic-0.8.0.tar.gz", hash = "sha256:f23b2d6952174cc1e17c33968fbde4491acec3f82bd2e3076636e2b07f076ef6"},
-    {file = "pytest_alembic-0.8.0-py3-none-any.whl", hash = "sha256:dba9567c1f0fbed9715fd99f5c46be47961cd880cfdf2bef844eae4c20920643"},
+    {file = "pytest-alembic-0.8.1.tar.gz", hash = "sha256:2487c9356a79a60177c13093bea6a568500e418c72266bfd853f7c5bf1d0f1ed"},
+    {file = "pytest_alembic-0.8.1-py3-none-any.whl", hash = "sha256:f671d522a1ec678227816ccae60c582f196b66b28cf83cadfc26a244a2f6c60a"},
 ]
 pytest-mock-resources = [
     {file = "pytest-mock-resources-2.2.5.tar.gz", hash = "sha256:0a31009765695e5680ca8609044979402ecca8ade8a8efe58b1d2e16a1adf262"},
@@ -1301,8 +1301,8 @@ sentry-sdk = [
     {file = "sentry_sdk-1.5.7-py2.py3-none-any.whl", hash = "sha256:411a8495bd18cf13038e5749e4710beb4efa53da6351f67b4c2f307c2d9b6d49"},
 ]
 setuplog = [
-    {file = "setuplog-0.2.3-py3-none-any.whl", hash = "sha256:06c3b64c079b840dec6f48449c609ca5658182ff1c457756c8a0654c4420bcae"},
-    {file = "setuplog-0.2.3.tar.gz", hash = "sha256:7239c5d5c01b8b9fd036bdde0d78eb00eceec409b11dd3e70e0aa142ab857ab5"},
+    {file = "setuplog-0.3.0-py3-none-any.whl", hash = "sha256:75c4a76170c397ac67a611a87401d49c8d450764c3285f2735abde1488a9c0fe"},
+    {file = "setuplog-0.3.0.tar.gz", hash = "sha256:9d57c5b8cb0a7747a844af5203f8f5ebf7e177a8cee39780f75522ed1947a583"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
@@ -1404,12 +1404,12 @@ types-dataclasses = [
     {file = "types_dataclasses-0.6.4-py3-none-any.whl", hash = "sha256:fef6ed4742ca27996530c6d549cd704772a4a86e4781841c9bb387001e369ec3"},
 ]
 types-requests = [
-    {file = "types-requests-2.27.11.tar.gz", hash = "sha256:6a7ed24b21780af4a5b5e24c310b2cd885fb612df5fd95584d03d87e5f2a195a"},
-    {file = "types_requests-2.27.11-py3-none-any.whl", hash = "sha256:506279bad570c7b4b19ac1f22e50146538befbe0c133b2cea66a9b04a533a859"},
+    {file = "types-requests-2.27.12.tar.gz", hash = "sha256:fd1382fa2e28eac848faedb0332840204f06f0cb517008e3c7b8282ca53e56d2"},
+    {file = "types_requests-2.27.12-py3-none-any.whl", hash = "sha256:120c949953b618e334bbe78de38e65aa261e1f48df021a05f0be833a848e4ba7"},
 ]
 types-urllib3 = [
-    {file = "types-urllib3-1.26.10.tar.gz", hash = "sha256:a26898f530e6c3f43f25b907f2b884486868ffd56a9faa94cbf9b3eb6e165d6a"},
-    {file = "types_urllib3-1.26.10-py3-none-any.whl", hash = "sha256:d755278d5ecd7a7a6479a190e54230f241f1a99c19b81518b756b19dc69e518c"},
+    {file = "types-urllib3-1.26.11.tar.gz", hash = "sha256:24d64e441168851eb05f1d022de18ae31558f5649c8f1117e384c2e85e31315b"},
+    {file = "types_urllib3-1.26.11-py3-none-any.whl", hash = "sha256:bd0abc01e9fb963e4fddd561a56d21cc371b988d1245662195c90379077139cd"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
