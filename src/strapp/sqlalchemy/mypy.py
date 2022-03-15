@@ -5,7 +5,6 @@ import sqlalchemy.ext.mypy.apply
 import sqlalchemy.ext.mypy.decl_class
 import sqlalchemy.ext.mypy.plugin
 import sqlalchemy.ext.mypy.util
-import sqlalchemy.orm
 from mypy.nodes import (
     ArgKind,
     AssignmentStmt,
@@ -19,27 +18,6 @@ from mypy.nodes import (
 )
 from mypy.plugin import ClassDefContext, DynamicClassDefContext, Plugin
 from mypy.types import get_proper_type
-
-
-class CreatedAt:
-    """A stub class purely used for type-checking.
-    """
-
-    created_at: sqlalchemy.orm.Mapped[datetime]
-
-
-class UpdatedAt:
-    """A stub class purely used for type-checking.
-    """
-
-    updated_at: sqlalchemy.orm.Mapped[datetime]
-
-
-class DeletedAt:
-    """A stub class purely used for type-checking.
-    """
-
-    updated_at: sqlalchemy.orm.Mapped[datetime]
 
 
 class StrappSqlalchemyPlugin(Plugin):
@@ -127,7 +105,7 @@ def make_dt_assignment(api, cls, name, base_cls_name):
     )
     cls.defs.body.append(statement)
 
-    type_ = api.named_type(f"strapp.sqlalchemy.mypy.{base_cls_name}")
+    type_ = api.named_type(f"strapp.sqlalchemy.model_base.{base_cls_name}")
     info.bases.append(type_)
 
     info.names[name] = SymbolTableNode(kind=MDEF, node=var, plugin_generated=True)
