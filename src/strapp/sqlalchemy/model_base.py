@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional, Type
 
 import sqlalchemy
+import sqlalchemy.orm
 
 try:
     from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta
@@ -134,3 +135,24 @@ def _set_attrs(dict_, created_at=False, updated_at=False, deleted_at=False, op=s
             "deleted_at",
             sqlalchemy.Column(sqlalchemy.types.DateTime(timezone=True), nullable=True),
         )
+
+
+class CreatedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    created_at: 'sqlalchemy.orm.Mapped[datetime]'
+
+
+class UpdatedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    updated_at: 'sqlalchemy.orm.Mapped[datetime]'
+
+
+class DeletedAt:
+    """A stub class purely used for type-checking.
+    """
+
+    deleted_at: 'sqlalchemy.orm.Mapped[datetime]'
