@@ -1,5 +1,11 @@
 # Changelog
 
+### [v0.3.8](https://github.com/schireson/strapp/compare/v0.3.6...v0.3.8) (2022-04-06)
+
+#### Features
+
+* Add map_first to http mappers.
+
 ### [v0.3.5](https://github.com/schireson/strapp/compare/v0.3.4...v0.3.5) (2022-03-09)
 
 #### Features
@@ -77,5 +83,3 @@
 #### Fixes
 
 * Dataclass version constraint for versions >=3.7. fd2ae4e
-
-
