@@ -68,6 +68,26 @@ def map_many(mapper):
     return decorator
 
 
+def map_first(mapper):
+    """Map the first item in a series of results.
+
+    Examples:
+        >>> def noop(data):
+        ...     return data + 1
+
+        >>> mapper = map_first(noop)
+        >>> mapper([4, 6, 1, 0])
+        5
+    """
+
+    def decorator(response):
+        if response:
+            return mapper(response[0])
+        return None
+
+    return decorator
+
+
 def into_map(mapper, field):
     """Execute a given mapper for each item in a list, then map the result by some attribute.
 
