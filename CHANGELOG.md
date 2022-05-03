@@ -1,5 +1,11 @@
 # Changelog
 
+### [v0.3.10](https://github.com/schireson/strapp/compare/v0.3.9...v0.3.10) (2022-05-03)
+
+#### Fixes
+
+* Fixes a bug in the 'default_give_up_retries' function ecec322
+
 ### [v0.3.9](https://github.com/schireson/strapp/compare/v0.3.8...v0.3.9) (2022-04-27)
 
 #### Features
