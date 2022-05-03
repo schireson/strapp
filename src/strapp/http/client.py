@@ -30,10 +30,7 @@ class Http5XXError(requests.exceptions.HTTPError):
 
 
 def default_give_up_retries(e):
-    if e.response is None:
-        raise e
-
-    if isinstance(e, requests.exceptions.HTTPError):
+    if isinstance(e, requests.exceptions.HTTPError) and e.response is not None:
         return 400 <= e.response.status_code < 500 and e.response.status_code != 429
     elif (
         isinstance(e, requests.exceptions.ConnectionError)
