@@ -88,6 +88,8 @@ class HttpClient:
             (
                 requests.exceptions.HTTPError,
                 requests.exceptions.ConnectionError,
+                requests.exceptions.ConnectTimeout,
+                requests.exceptions.ReadTimeout,
                 requests.exceptions.Timeout,
             ),
             max_time=210,

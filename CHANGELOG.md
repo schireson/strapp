@@ -1,5 +1,11 @@
 # Changelog
 
+### [v0.3.11](https://github.com/schireson/strapp/compare/v0.3.10...v0.3.11) (2022-06-01)
+
+#### Fixes
+
+* Automatically retries when encountering (ConnectTimeout, ReadTimeout) exception on client requests.
+
 ### [v0.3.10](https://github.com/schireson/strapp/compare/v0.3.9...v0.3.10) (2022-05-03)
 
 #### Fixes
