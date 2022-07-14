@@ -4,7 +4,6 @@ import logging
 import urllib.parse
 from typing import Any, Dict, Optional, Union
 
-import requests
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
@@ -94,6 +93,7 @@ def add_context(*, user: Optional[Dict] = None, extra: Optional[Dict[str, Any]] 
 @contextlib.contextmanager
 def enrich_http_error():
     """Enhance Sentry reports for HTTPErrors with additional context about the request and response."""
+    import requests
 
     with push_scope(propagate=True) as scope:
         try:
