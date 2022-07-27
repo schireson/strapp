@@ -1,5 +1,15 @@
 # Changelog
 
+### [v0.3.12](https://github.com/schireson/strapp/compare/v0.3.10...v0.3.12) (2022-07-27)
+
+#### Fixes
+
+* Fixes a bug in datadog initialization
+
+#### Fixes
+
+* Fixes a bug in the 'default_give_up_retries' function ecec322
+
 ### [v0.3.10](https://github.com/schireson/strapp/compare/v0.3.9...v0.3.10) (2022-05-03)
 
 #### Fixes

@@ -17,7 +17,7 @@ def setup(
     namespace: Optional[str] = None,
 ):
     app_key = config.get("app_key")
-    api_key = config.get("app_key")
+    api_key = config.get("api_key")
     statsd_host = config.get("statsd_host")
     statsd_port = config.get("statsd_port")
 
