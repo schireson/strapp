@@ -24,6 +24,8 @@ setuplog = {version = ">=0.2.2", optional = true}
 backoff = {version = "^1.11.1", optional = true}
 configly = {version = "*", optional = true}
 datadog = {version = "*", optional = true}
+dramatiq = {version = "*", optional = true, extras = ["redis"]}
+redis = {version = "^4.3.4", optional = true}
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -34,7 +36,7 @@ isort = "^4.3.21"
 mypy = "^0.930"
 pydocstyle = "^4.0.1"
 pytest = "^6.0"
-pytest-mock-resources = "*"
+pytest-mock-resources = {version = "*", extras = ['docker']}
 sqlalchemy = ">=1.4"
 sqlalchemy-stubs = "*"
 requests = "^2.26.0"
@@ -43,6 +45,7 @@ types-dataclasses = "^0.6.2"
 types-requests = "^2.26.3"
 types-contextvars = "^2.4.0"
 
+
 [tool.poetry.extras]
 click = ["click", "dataclasses"]
 sqlalchemy = ["sqlalchemy"]
@@ -50,6 +53,7 @@ sentry = ["requests", "sentry-sdk"]
 flask = ["flask", "flask_reverse_proxy", "dataclasses"]
 http = ["backoff", "setuplog"]
 datadog = ["datadog", "configly"]
+dramatiq = ["dramatiq", "redis"]
 
 [tool.black]
 line_length = 100
