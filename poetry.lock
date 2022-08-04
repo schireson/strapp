@@ -285,6 +285,17 @@ optional = true
 python-versions = "*"
 
 [[package]]
+name = "freezegun"
+version = "1.2.1"
+description = "Let your Python tests travel through time"
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+python-dateutil = ">=2.7"
+
+[[package]]
 name = "gitdb"
 version = "4.0.9"
 description = "Git Object Database"
@@ -659,6 +670,17 @@ mongo = ["pymongo", "filelock", "python-on-whales (<0.22.0)"]
 redis = ["redis", "filelock", "python-on-whales (<0.22.0)"]
 mysql = ["pymysql (>=1.0)", "filelock", "python-on-whales (<0.22.0)"]
 docker = ["filelock", "python-on-whales (<0.22.0)"]
+
+[[package]]
+name = "python-dateutil"
+version = "2.8.2"
+description = "Extensions to the standard Python datetime module"
+category = "dev"
+optional = false
+python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
+
+[package.dependencies]
+six = ">=1.5"
 
 [[package]]
 name = "python-on-whales"
@@ -1045,7 +1067,7 @@ sqlalchemy = ["sqlalchemy"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "fce81850ce8f2b5b7905c545169c0295746ed6a1745c4aea8bc2bdcb73968125"
+content-hash = "70308e275a4f6d95e543b1873e7120b3460b09f8de3cc6c6bda55e32c380441f"
 
 [metadata.files]
 alembic = [
@@ -1183,6 +1205,10 @@ flask = [
 ]
 flask-reverse-proxy = [
     {file = "flask-reverse-proxy-0.2.0.2.tar.gz", hash = "sha256:637c74fe0af6dfd697b74b46467cbfc92a7dd34bae1991c43ce52b9da61ae1bc"},
+]
+freezegun = [
+    {file = "freezegun-1.2.1-py3-none-any.whl", hash = "sha256:15103a67dfa868ad809a8f508146e396be2995172d25f927e48ce51c0bf5cb09"},
+    {file = "freezegun-1.2.1.tar.gz", hash = "sha256:b4c64efb275e6bc68dc6e771b17ffe0ff0f90b81a2a5189043550b6519926ba4"},
 ]
 gitdb = [
     {file = "gitdb-4.0.9-py3-none-any.whl", hash = "sha256:8033ad4e853066ba6ca92050b9df2f89301b8fc8bf7e9324d412a63f8bf1a8fd"},
@@ -1432,6 +1458,10 @@ pytest-mock-resources = [
     {file = "pytest_mock_resources-2.4.2-py3-none-any.whl", hash = "sha256:1113d8d85ec1f6dabb7526ba8312e023f7e8a77608ca2c23385d05e2c7bce46b"},
     {file = "pytest-mock-resources-2.4.3.tar.gz", hash = "sha256:7281e8e6c92cd83335a952b8e3e1a3c76dd2f9b0588cd1518ca36346f79d8cf9"},
     {file = "pytest_mock_resources-2.4.3-py3-none-any.whl", hash = "sha256:a3f82b69b80d934f25a887f0474b7af55f0fcb4257fad7ffb03d27368c1bd212"},
+]
+python-dateutil = [
+    {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
+    {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 python-on-whales = [
     {file = "python-on-whales-0.50.0.tar.gz", hash = "sha256:6076cb5e39fde85c4e8a8dd7d354c311908fd42c0f355be3a1087fd4cc82db7e"},
