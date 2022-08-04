@@ -24,7 +24,7 @@ def setup_mock_actor(fn, broker, retries=0) -> dramatiq.Actor:
     mock.side_effect = fn
     mock.__name__ = fn.__name__
 
-    actor = PreparedActor(mock, max_retries=retries, max_backoff_ms=1, store_results=True)
+    actor = PreparedActor(mock, max_retries=retries, max_backoff=1, store_results=True)
 
     return actor.register(broker=broker)
 
@@ -79,7 +79,7 @@ def test_sentry_middleware_live(broker):
 
     with pytest.raises(ValueError):
         with worker_context(broker, actor):
-            enqueue("foo", num=6)
+            enqueue("sample_actor", num=6)
 
     sentry_sdk.flush()
 

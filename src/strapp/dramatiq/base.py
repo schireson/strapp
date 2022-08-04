@@ -33,7 +33,6 @@ def configure(
     return broker
 
 
-@dataclass
 class PreparedActor:
     """Prepared configuration for a Dramatiq Actor.
 
@@ -49,27 +48,39 @@ class PreparedActor:
     https://dramatiq.io/guide.html#message-retries
     """
 
-    fn: Callable
-    actor_name: Optional[str] = None
-    broker: dramatiq.Broker = None
-    queue_name: str = "default"
-    store_results: bool = False
-    time_limit_ms: int = 1000 * 60 * 60
-    max_retries: int = 0
-    max_backoff_ms: int = None
-    options: dict = field(default_factory=dict)
+    def __init__(
+        self,
+        fn: Callable,
+        *,
+        actor_name: Optional[str] = None,
+        broker: dramatiq.Broker = None,
+        queue_name: str = "default",
+        store_results: bool = False,
+        time_limit_ms: int = 1000 * 60 * 60,
+        max_retries: int = 0,
+        **options,
+    ):
+        self.fn = fn
+        self.actor_name = actor_name
+        self.broker = broker
+        self.queue_name = queue_name
+        self.store_results = store_results
+        self.time_limit_ms = time_limit_ms
+        self.max_retries = max_retries
+        self.options = options
 
     def register(self, broker: dramatiq.Broker = None) -> dramatiq.Actor:
         """Register an actor to a broker."""
 
         actor_decorator = dramatiq.actor(
+            # arguments for dramatiq.Actor
             actor_name=self.actor_name or self.fn.__name__,
             broker=broker or self.broker,
             queue_name=self.queue_name,
+            # options passed to middleware
             store_results=self.store_results,
             time_limit=self.time_limit_ms,
             max_retries=self.max_retries,
-            max_backoff=self.max_backoff_ms,
             **self.options,
         )
 
@@ -121,19 +132,20 @@ def get_result(
 
     Examples:
         Define an actor
-        >>> @actor('task-name', store_results=True) # doctest: +SKIP
-        ... def task_name():
+        >>> def task_name():                                # doctest: +SKIP
         ...     return True
+        >>> PreparedActor(task_name, store_results=True)    # doctest: +SKIP
 
         Enqueue a task
-        >>> result = enqueue('task-name')           # doctest: +SKIP
-        >>> message_id = result.message_id          # doctest: +SKIP
+        >>> message = enqueue('task_name')                  # doctest: +SKIP
+        >>> message_id = message.message_id                 # doctest: +SKIP
 
         # Option 1
-        >>> get_result(result)                      # doctest: +SKIP
+        >>> get_result(message)                             # doctest: +SKIP
         True
 
-        >>> get_result('task-name', message_id)     # doctest: +SKIP
+        # Option 2
+        >>> get_result('task_name', message_id)             # doctest: +SKIP
         True
     """
     if isinstance(task_name_or_message, dramatiq.Message):
