@@ -1,21 +1,29 @@
 version: 2.1
 
 executors:
-  python36:
-    docker:
-      - image: circleci/python:3.6
-
   python37:
     docker:
       - image: circleci/python:3.7
+      - image: cimg/redis:6.2.6
 
   python38:
     docker:
       - image: circleci/python:3.8
+      - image: cimg/redis:6.2.6
+
+  python39:
+    docker:
+      - image: circleci/python:3.9
+      - image: cimg/redis:6.2.6
+
+  python310:
+    docker:
+      - image: circleci/python:3.10
+      - image: cimg/redis:6.2.6
 
   publish:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.7
 
 commands:
   setup:
@@ -65,18 +73,6 @@ commands:
       - run: bash <(curl -s https://codecov.io/bash)
 
 jobs:
-  test-python36:
-    executor: python36
-    steps:
-      - setup-python
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - attach_workspace:
-          at: .
-      - run-make:
-          command: test
-      - persist-coverage
-
   test-python37:
     executor: python37
     steps:
@@ -85,6 +81,7 @@ jobs:
           docker_layer_caching: true
       - run-make:
           command: test
+      - persist-coverage
 
   test-python38:
     executor: python38
@@ -95,8 +92,30 @@ jobs:
       - run-make:
           command: test
 
+  test-python39:
+    executor: python39
+    steps:
+      - setup-python
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
+      - run-make:
+          command: test
+
+  test-python310:
+    executor: python310
+    steps:
+      - setup-python
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - attach_workspace:
+          at: .
+      - run-make:
+          command: test
+
   lint:
-    executor: python36
+    executor: python37
     steps:
       - setup-python
       - run-make:
@@ -112,15 +131,17 @@ jobs:
 workflows:
   build_all:
     jobs:
-      - test-python36
       - test-python37
       - test-python38
+      - test-python39
+      - test-python310
 
       - publish:
           requires:
-            - test-python36
             - test-python37
             - test-python38
+            - test-python39
+            - test-python310
           filters:
             branches:
               only:
