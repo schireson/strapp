@@ -87,7 +87,7 @@ class PreparedActor:
         return actor_decorator(self.fn)
 
 
-def enqueue(task_name, *, dramatiq_queue="default", broker=None, **kwargs) -> dramatiq.Message:
+def enqueue(task_name, *, queue_name="default", broker=None, **kwargs) -> dramatiq.Message:
     """Enqueue work onto the queue, by `task_name`.
 
     The "default" behavior is to use the actual python function object `actor.send`. Given
@@ -96,7 +96,7 @@ def enqueue(task_name, *, dramatiq_queue="default", broker=None, **kwargs) -> dr
 
     Args:
         task_name: The string name given to the `@actor` decorator.
-        dramatiq_queue: optional queue name. defaults to "default".
+        queue_name: optional queue name. defaults to "default".
         broker: Overrides the global broker
         **kwargs: Passed through to the corresponding `@actor` function. Must be json serializable.
     """
@@ -105,7 +105,7 @@ def enqueue(task_name, *, dramatiq_queue="default", broker=None, **kwargs) -> dr
 
     return broker.enqueue(
         dramatiq.Message(
-            queue_name=dramatiq_queue, actor_name=task_name, args=(), kwargs=kwargs, options={},
+            queue_name=queue_name, actor_name=task_name, args=(), kwargs=kwargs, options={},
         )
     )
 
@@ -114,7 +114,7 @@ def get_result(
     task_name_or_message: Union[str, dramatiq.Message] = None,
     message_id=None,
     *,
-    dramatiq_queue="default",
+    queue_name="default",
     block: bool = False,
     timeout: int = None,
 ):
@@ -125,7 +125,7 @@ def get_result(
             call, or the task name of the task for which you want results.
         message_id: The message_id would have been directly available on the result of an `enqueue` call,
             by its `message_id` attribute.
-        dramatiq_queue: Optional queue name. defaults to "default".
+        queue_name: Optional queue name. defaults to "default".
         block: Whether or not to block while waiting for a
             result.
         timeout: The maximum amount of time, in ms, to block while waiting for a result.
@@ -152,7 +152,7 @@ def get_result(
         message = task_name_or_message
     else:
         message = dramatiq.Message(
-            queue_name=dramatiq_queue,
+            queue_name=queue_name,
             actor_name=task_name_or_message,
             message_id=message_id,
             args=(),
