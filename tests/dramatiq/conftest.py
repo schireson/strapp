@@ -17,9 +17,6 @@ def e2e_broker(redis):
 
     dramatiq.set_broker(e2e_broker)
 
-    e2e_broker.emit_after("process_boot")
-    e2e_broker.flush_all()
-
     yield e2e_broker
 
 
@@ -30,8 +27,5 @@ def broker():
     broker.add_middleware(Results(backend=backend))
 
     dramatiq.set_broker(broker)
-
-    broker.emit_after("process_boot")
-    broker.flush_all()
 
     yield broker
