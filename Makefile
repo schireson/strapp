@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := test
 
 install:
-	poetry install -E click -E sqlalchemy -E sentry -E flask -E http -E datadog
+	poetry install -E click -E sqlalchemy -E sentry -E flask -E http -E datadog -E dramatiq
 
 build:
 	poetry build
