@@ -6,7 +6,7 @@ from dramatiq.brokers.stub import StubBroker
 
 @contextlib.contextmanager
 def worker_context(
-    broker: StubBroker, actor: dramatiq.Actor = None, worker_timeout=100, worker_threads=1,
+    broker: dramatiq.Broker, queue_name: str = "default", worker_timeout=100, worker_threads=1,
 ):
     broker.emit_after("process_boot")
     broker.flush_all()
@@ -16,8 +16,8 @@ def worker_context(
 
     yield worker
 
-    if actor:
-        broker.join(actor.queue_name, fail_fast=True)
+    if isinstance(broker, StubBroker):
+        broker.join(queue_name, fail_fast=True)
 
     worker.join()
     worker.stop()
