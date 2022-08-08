@@ -35,7 +35,7 @@ def test_retries(broker, retries):
     actor = setup_mock_actor(sample_actor, broker, retries=retries)
 
     with pytest.raises(ValueError):
-        with worker_context(broker, actor):
+        with worker_context(broker, actor.queue_name):
             message = enqueue("sample_actor", num=6)
 
     assert actor.fn.call_count == retries + 1  # n retries + 1 original call
@@ -56,7 +56,7 @@ def test_sentry_middleware(mock_sentry_sdk, exception_type, broker):
     actor = PreparedActor(foo).register(broker)
 
     with pytest.raises(exception_type):
-        with worker_context(broker, actor):
+        with worker_context(broker, actor.queue_name):
             enqueue("foo")
 
     assert mock_sentry_sdk.capture_exception.call_count == 1
@@ -78,7 +78,7 @@ def test_sentry_middleware_live(broker):
     actor = setup_mock_actor(sample_actor, broker, retries=0)
 
     with pytest.raises(ValueError):
-        with worker_context(broker, actor):
+        with worker_context(broker, actor.queue_name):
             enqueue("sample_actor", num=6)
 
     sentry_sdk.flush()
