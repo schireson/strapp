@@ -89,6 +89,7 @@ class HttpClient:
                 requests.exceptions.HTTPError,
                 requests.exceptions.ConnectionError,
                 requests.exceptions.Timeout,
+                requests.exceptions.ChunkedEncodingError,
             ),
             max_time=210,
             max_tries=retries,
