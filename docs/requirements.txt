@@ -3,5 +3,5 @@ sphinx==3.3.0
 sphinx-autobuild
 sphinx_autodoc_typehints
 sphinx_rtd_theme
-mistune==0.8.4
+mistune==2.0.3
 .
