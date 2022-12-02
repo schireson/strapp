@@ -77,8 +77,7 @@ jobs:
     executor: python37
     steps:
       - setup-python
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run-make:
           command: test
       - persist-coverage
@@ -87,8 +86,7 @@ jobs:
     executor: python38
     steps:
       - setup-python
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run-make:
           command: test
 
@@ -96,8 +94,7 @@ jobs:
     executor: python39
     steps:
       - setup-python
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - attach_workspace:
           at: .
       - run-make:
@@ -107,8 +104,7 @@ jobs:
     executor: python310
     steps:
       - setup-python
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - attach_workspace:
           at: .
       - run-make:
