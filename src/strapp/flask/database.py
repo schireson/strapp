@@ -21,8 +21,7 @@ def sqlalchemy_database(app: flask.Flask, config: Mapping):
 
     @app.teardown_appcontext
     def shutdown_session(response_or_exc):
-        """Ensure that the session is removed on app context teardown.
-        """
+        """Ensure that the session is removed on app context teardown."""
         Session.remove()
         return response_or_exc
 

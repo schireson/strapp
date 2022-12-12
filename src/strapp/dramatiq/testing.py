@@ -6,7 +6,10 @@ from dramatiq.brokers.stub import StubBroker
 
 @contextlib.contextmanager
 def worker_context(
-    broker: dramatiq.Broker, queue_name: str = "default", worker_timeout=100, worker_threads=1,
+    broker: dramatiq.Broker,
+    queue_name: str = "default",
+    worker_timeout=100,
+    worker_threads=1,
 ):
     broker.emit_after("process_boot")
     broker.flush_all()

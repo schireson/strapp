@@ -17,7 +17,7 @@ click = { version = "*", optional = true }
 flask = { version = "*", optional = true }
 sentry-sdk = { version = "*", optional = true }
 requests = { version = "*", optional = true }
-sqlalchemy = { version = "*", optional = true }
+sqlalchemy = { version = ">=1.4", optional = true, extras = ["mypy"] }
 flask_reverse_proxy = { version = "*", optional = true }
 setuplog = {version = ">=0.2.2", optional = true}
 backoff = {version = "*", optional = true}
@@ -28,16 +28,14 @@ redis = {version = "^4.3.4", optional = true}
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
-black = "^19.10b0"
+black = "22.3.0"
 coverage = "*"
 flake8 = "^3.7.9"
 isort = "^4.3.21"
-mypy = "^0.930"
+mypy = "^0.991"
 pydocstyle = "^4.0.1"
 pytest = "^6.0"
 pytest-mock-resources = {extras = ["docker"], version = "^2.4.3"}
-sqlalchemy = ">=1.4"
-sqlalchemy-stubs = "*"
 requests = "^2.26.0"
 pytest-alembic = ">=0.6.0"
 types-dataclasses = "^0.6.2"

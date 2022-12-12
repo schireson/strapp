@@ -68,7 +68,9 @@ class Test_Request:
 
     def test_request_filter_for(self, responses):
         responses.add(
-            responses.GET, f"{self.base_url}/some_endpoint", json=[1, 2, 3, 4],
+            responses.GET,
+            f"{self.base_url}/some_endpoint",
+            json=[1, 2, 3, 4],
         )
         client = FakeHttpClient.setup_client(base_url=self.base_url)
 
@@ -118,7 +120,9 @@ class Test_Request:
 
     def test_request_flatten(self, responses):
         responses.add(
-            responses.GET, f"{self.base_url}/some_endpoint", json=["hello"],
+            responses.GET,
+            f"{self.base_url}/some_endpoint",
+            json=["hello"],
         )
 
         client = FakeHttpClient.setup_client(base_url=self.base_url)
@@ -128,7 +132,7 @@ class Test_Request:
         assert response == ["h", "e", "l", "l", "o"]
 
 
-def test_prepared_request_typing(responses):
+def test_prepared_request_typing(responses) -> None:
     @dataclass
     class Bar:
         id: int

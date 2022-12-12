@@ -27,8 +27,4 @@ class FakeHttpClient:
             raw_response = make_request(self.client.make_request, **request_args)
             response = raw_response.json()
 
-            return (
-                prepared_request.response_mapper(response)
-                if prepared_request.response_mapper
-                else response
-            )
+            return prepared_request.response_mapper(response)

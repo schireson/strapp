@@ -84,8 +84,7 @@ class Resolver:
         return arg_context
 
     def group(self, cli=None, *group_args, **group_kwargs):
-        """Alias :func:`click.group`, which can automatically resolve and inject arguments.
-        """
+        """Alias :func:`click.group`, which can automatically resolve and inject arguments."""
         if cli is None:
             cli = click
 

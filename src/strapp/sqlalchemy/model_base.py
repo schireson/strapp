@@ -1,16 +1,13 @@
+from __future__ import annotations
+
 import operator
 from datetime import datetime
 from typing import Optional, Type
 
 import sqlalchemy
-import sqlalchemy.orm
-
-try:
-    from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
-except ImportError:
-    from sqlalchemy.ext.declarative import DeclarativeMeta as SQLAlchemyDeclarativeMeta
-    from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
+from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
+from sqlalchemy.orm import DeclarativeMeta as SQLAlchemyDeclarativeMeta
+from sqlalchemy.orm import Mapped
 
 
 def repr_fn(instance):
@@ -94,7 +91,10 @@ def declarative_base(
     else:
         base_ = base  # type: ignore
 
-    dict_ = dict(__abstract__=True, __init_subclass__=__init_subclass__,)
+    dict_ = dict(
+        __abstract__=True,
+        __init_subclass__=__init_subclass__,
+    )
 
     if repr:
         dict_["__repr__"] = repr_fn
@@ -125,7 +125,9 @@ def _set_attrs(dict_, created_at=False, updated_at=False, deleted_at=False, op=s
             dict_,
             "updated_at",
             sqlalchemy.Column(
-                sqlalchemy.types.DateTime(timezone=True), onupdate=datetime.utcnow, nullable=True,
+                sqlalchemy.types.DateTime(timezone=True),
+                onupdate=datetime.utcnow,
+                nullable=True,
             ),
         )
 
@@ -138,21 +140,18 @@ def _set_attrs(dict_, created_at=False, updated_at=False, deleted_at=False, op=s
 
 
 class CreatedAt:
-    """A stub class purely used for type-checking.
-    """
+    """A stub class purely used for type-checking."""
 
-    created_at: 'sqlalchemy.orm.Mapped[datetime]'
+    created_at: Mapped[datetime]
 
 
 class UpdatedAt:
-    """A stub class purely used for type-checking.
-    """
+    """A stub class purely used for type-checking."""
 
-    updated_at: 'sqlalchemy.orm.Mapped[datetime]'
+    updated_at: Mapped[Optional[datetime]]
 
 
 class DeletedAt:
-    """A stub class purely used for type-checking.
-    """
+    """A stub class purely used for type-checking."""
 
-    deleted_at: 'sqlalchemy.orm.Mapped[datetime]'
+    deleted_at: Mapped[Optional[datetime]]
