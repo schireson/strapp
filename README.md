@@ -1,4 +1,4 @@
-![CircleCI](https://img.shields.io/circleci/build/gh/schireson/strapp/master) [![codecov](https://codecov.io/gh/schireson/strapp/branch/master/graph/badge.svg)](https://codecov.io/gh/schireson/strapp) [![Documentation Status](https://readthedocs.org/projects/strapp/badge/?version=latest)](https://strapp.readthedocs.io/en/latest/?badge=latest)
+![Github Actions Build](https://github.com/schireson/databudgie/actions/workflows/build.yml/badge.svg) [![codecov](https://codecov.io/gh/schireson/strapp/branch/main/graph/badge.svg)](https://codecov.io/gh/schireson/strapp) [![Documentation Status](https://readthedocs.org/projects/strapp/badge/?version=latest)](https://strapp.readthedocs.io/en/latest/?badge=latest)
 
 # Strapp
 
@@ -27,17 +27,21 @@ opting into or out of specific strapp decisions and modules entirely optional.
       ```
 
 - [Click](https://strapp.readthedocs.io/latest/click.html)
+
   - Context "Resolver"
 
 - [Flask](https://strapp.readthedocs.io/latest/flask.html)
+
   - Non-decorator based route registration pattern (removes circular import issues)
   - Opt-in error handlers
   - Opt-in database handling
 
 - [Logging](https://strapp.readthedocs.io/latest/logging.html)
+
   - Logging verbosity helper
 
 - [Sentry](https://strapp.readthedocs.io/latest/sentry.html)
+
   - Setup helper
   - Context helper
 
