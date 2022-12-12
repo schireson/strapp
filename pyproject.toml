@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.3.15"
+version = "0.3.16"
 description = ""
 authors = []
 packages = [
@@ -11,7 +11,6 @@ include = ["src/strapp/py.typed"]
 [tool.poetry.dependencies]
 python = "^3.7"
 
-dataclasses = { version = "*", python = ">=3.6, <3.7" }
 typing_extensions = { version = ">=3.10", python = "<=3.10" }
 
 click = { version = "*", optional = true }
@@ -21,7 +20,7 @@ requests = { version = "*", optional = true }
 sqlalchemy = { version = "*", optional = true }
 flask_reverse_proxy = { version = "*", optional = true }
 setuplog = {version = ">=0.2.2", optional = true}
-backoff = {version = "^1.11.1", optional = true}
+backoff = {version = "*", optional = true}
 configly = {version = "*", optional = true}
 datadog = {version = "*", optional = true}
 dramatiq = {version = "*", optional = true, extras = ["redis"]}
