@@ -58,7 +58,7 @@ def gauge(metric, value, tags=None, sample_rate=None):
 
 
 @contextlib.contextmanager
-def gauge_duration(metric, tags=None, sample_rate=None):
+def gauge_duration(metric: str, tags=None, sample_rate=None):
     start = datetime.datetime.now()
     yield
     end = datetime.datetime.now()

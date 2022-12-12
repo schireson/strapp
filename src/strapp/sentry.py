@@ -2,7 +2,7 @@ import contextlib
 import json
 import logging
 import urllib.parse
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Generator, Optional, Union
 
 import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
@@ -91,7 +91,7 @@ def add_context(*, user: Optional[Dict] = None, extra: Optional[Dict[str, Any]] 
 
 
 @contextlib.contextmanager
-def enrich_http_error():
+def enrich_http_error() -> Generator[None, None, None]:
     """Enhance Sentry reports for HTTPErrors with additional context about the request and response."""
     import requests
 
@@ -107,7 +107,7 @@ def enrich_http_error():
                     {
                         "url": request.url,
                         "headers": dict(request.headers),
-                        "body": _parse_body(request.body, request.headers.get("Content-Type")),
+                        "body": _parse_body(request.body, request.headers.get("Content-Type", "")),
                     },
                 )
 
@@ -118,15 +118,17 @@ def enrich_http_error():
                     "url": response.url,
                     "status_code": response.status_code,
                     "headers": dict(response.headers),
-                    "body": _parse_body(response.text, response.headers.get("Content-Type")),
+                    "body": _parse_body(response.text, response.headers.get("Content-Type", "")),
                 },
             )
 
             raise  # pass err back into `push_scope` for handling
 
 
-def _parse_body(content: str, content_type: str) -> Union[dict, str]:
-    if "application/json" in content_type:
+def _parse_body(
+    content: Union[Optional[str], bytes], content_type: str
+) -> Union[dict, str, bytes, None]:
+    if "application/json" in content_type and content:
         return json.loads(content)
     if "application/x-www-form-urlencoded" in content_type:
         return urllib.parse.parse_qs(content)

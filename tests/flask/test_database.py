@@ -87,7 +87,9 @@ def test_changed_status_code():
     def view():
         return 5
 
-    app = create_app(routes=[Route.to("GET", "/foo", view)],)
+    app = create_app(
+        routes=[Route.to("GET", "/foo", view)],
+    )
     with app.test_client() as client:
         response = client.get("/foo")
 

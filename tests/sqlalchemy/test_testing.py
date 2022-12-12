@@ -1,15 +1,16 @@
 import pytest
 import sqlalchemy
+from sqlalchemy.orm import registry
 
-from strapp.sqlalchemy.model_base import declarative_base
 from strapp.sqlalchemy.testing import assert_equals, assert_equals_factory
 
 
 class Test_assert_equals:
     def test_equals_false(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
@@ -19,9 +20,10 @@ class Test_assert_equals:
             assert_equals(a, b)
 
     def test_equals_tuple(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
@@ -29,9 +31,10 @@ class Test_assert_equals:
         assert_equals(a, (1,))
 
     def test_assert_equals(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
@@ -40,9 +43,10 @@ class Test_assert_equals:
         assert_equals(a, b)
 
     def test_assert_equals_include(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
             id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
@@ -54,9 +58,10 @@ class Test_assert_equals:
             assert_equals(a, b, include=["id2"])
 
     def test_assert_equals_exclude(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
             id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
@@ -68,9 +73,10 @@ class Test_assert_equals:
             assert_equals(a, b, exclude=["id"])
 
     def test_assert_equals_factory(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
             id2 = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
@@ -91,9 +97,10 @@ class Test_assert_equals:
             assert_models_equal4(a, b)
 
     def test_deferred(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
             id2 = sqlalchemy.orm.deferred(
@@ -106,9 +113,10 @@ class Test_assert_equals:
         assert_equals(a, b)
 
     def test_invalid_include(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 
@@ -119,9 +127,10 @@ class Test_assert_equals:
         assert "wat" in str(e.value)
 
     def test_invalid_exclude(self):
-        Base = declarative_base()
+        mapper_registry = registry()
 
-        class Foo(Base):
+        @mapper_registry.mapped
+        class Foo:
             __tablename__ = "foo"
             id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False)
 

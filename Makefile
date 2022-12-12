@@ -13,7 +13,7 @@ test:
 	coverage xml
 
 lint:
-	flake8 src tests || exit 1
+	flake8 src tests --ignore=E501,W503 || exit 1
 	isort --check-only --recursive src tests || exit 1
 	pydocstyle src tests || exit 1
 	black --check src tests || exit 1

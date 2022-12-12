@@ -15,7 +15,8 @@ def create_session_cls(config: Mapping, *, scopefunc=None, engine_kwargs: Option
     engine = sqlalchemy.create_engine(url, **(engine_kwargs or {}))
 
     return sqlalchemy.orm.scoping.scoped_session(
-        sqlalchemy.orm.session.sessionmaker(bind=engine), scopefunc=scopefunc,
+        sqlalchemy.orm.session.sessionmaker(bind=engine),
+        scopefunc=scopefunc,
     )
 
 

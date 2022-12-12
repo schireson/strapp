@@ -55,7 +55,6 @@ class Test_EnrichHttpError:
 
 class Test_PushScope:
     def test_it_configures_scope(self, mock_sentry_sdk):
-        scope: mock.MagicMock
         with push_scope("test_scope", tag="tag") as scope:
             assert scope.transaction == "test_scope"
             scope.set_tag.assert_called_once_with("tag", "tag")

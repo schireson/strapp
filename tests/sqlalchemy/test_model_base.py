@@ -1,14 +1,9 @@
 from datetime import datetime, timedelta, timezone
 
 import sqlalchemy
-import sqlalchemy.ext
+from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
 
 from strapp.sqlalchemy.model_base import declarative_base
-
-try:
-    from sqlalchemy.orm import declarative_base as sqlalchemy_declarative_base
-except ImportError:
-    from sqlalchemy.ext.declarative import declarative_base as sqlalchemy_declarative_base
 
 
 class Test_declarative_base:
@@ -18,7 +13,11 @@ class Test_declarative_base:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         a = Foo(id=1)
         assert "Foo object at" in repr(a)
@@ -28,7 +27,11 @@ class Test_declarative_base:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         a = Foo(id=1)
         assert "Foo object at" in repr(a)
@@ -38,7 +41,11 @@ class Test_declarative_base:
 
         class Foo(Base):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         a = Foo(id=1)
         assert repr(a) == "Foo(id=1)"
@@ -48,7 +55,11 @@ class Test_declarative_base:
 
         class Foo(Base, created_at=True):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         a = Foo(id=1)
         assert repr(a) == "Foo(id=1, created_at=None)"
@@ -58,7 +69,11 @@ class Test_declarative_base:
 
         class Foo(Base, updated_at=True):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         a = Foo(id=1)
         assert repr(a) == "Foo(id=1, updated_at=None)"
@@ -68,11 +83,19 @@ class Test_declarative_base:
 
         class Foo(Base, updated_at=True):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         class Bar(Base, updated_at=True):
             __tablename__ = "bar"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
             foo_id = sqlalchemy.orm.deferred(
                 sqlalchemy.Column(
                     sqlalchemy.types.Integer(), sqlalchemy.ForeignKey("foo.id"), nullable=False
@@ -96,7 +119,11 @@ class Test_declarative_base:
 
         class Foo(Base, created_at=True):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         Base.metadata.create_all(bind=db.connection())
         foo = Foo(id=1)
@@ -109,7 +136,11 @@ class Test_declarative_base:
 
         class Foo(Base, updated_at=True):
             __tablename__ = "foo"
-            id = sqlalchemy.Column(sqlalchemy.types.Integer(), primary_key=True, nullable=False,)
+            id = sqlalchemy.Column(
+                sqlalchemy.types.Integer(),
+                primary_key=True,
+                nullable=False,
+            )
 
         Base.metadata.create_all(bind=db.connection())
         foo = Foo(id=1)

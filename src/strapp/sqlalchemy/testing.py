@@ -30,8 +30,7 @@ def assert_equals_factory(include=None, exclude=None):
 
 
 def _collect_loaded_values(instance, include=None, exclude=None):
-    """Collect a sqlalchemy model into a comparable object.
-    """
+    """Collect a sqlalchemy model into a comparable object."""
     cls = instance.__class__
     class_name = cls.__name__
     state = sqlalchemy.inspect(cls)

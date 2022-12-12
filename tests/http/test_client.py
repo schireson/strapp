@@ -16,7 +16,10 @@ def test_4xx(responses):
 
 def test_5xx(responses):
     responses.add(
-        responses.GET, "http://foo/whatup", json={"error": "internal server error"}, status=500,
+        responses.GET,
+        "http://foo/whatup",
+        json={"error": "internal server error"},
+        status=500,
     )
 
     client = HttpClient("http://foo")
@@ -29,7 +32,10 @@ def test_5xx(responses):
 
 def test_log_response_body_json(responses):
     responses.add(
-        responses.GET, "http://foo/whatup", json={"all": "good"}, status=200,
+        responses.GET,
+        "http://foo/whatup",
+        json={"all": "good"},
+        status=200,
     )
 
     client = HttpClient("http://foo")
@@ -42,7 +48,10 @@ def test_log_response_body_json(responses):
 
 def test_log_response_body_text(responses):
     responses.add(
-        responses.GET, "http://foo/whatup", body="<SOMERANDOHTML/>", status=200,
+        responses.GET,
+        "http://foo/whatup",
+        body="<SOMERANDOHTML/>",
+        status=200,
     )
     client = HttpClient("http://foo")
 

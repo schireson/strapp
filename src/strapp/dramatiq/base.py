@@ -1,4 +1,3 @@
-from dataclasses import dataclass, field
 from typing import Callable, Optional, Union
 
 import dramatiq
@@ -8,12 +7,12 @@ from dramatiq.results.backends import RedisBackend
 
 try:
     from strapp.dramatiq.datadog import DatadogMiddleware
-except:  # noqa: E722
+except Exception:  # nosec
     pass
 
 
 def configure(
-    *, redis_dsn=None, enable_datadog_middleware: bool = False, env: str = None
+    *, redis_dsn=None, enable_datadog_middleware: bool = False, env: Optional[str] = None
 ) -> RedisBroker:
     """Configure a Redis broker.
 
@@ -105,7 +104,11 @@ def enqueue(task_name, *, queue_name="default", broker=None, **kwargs) -> dramat
 
     return broker.enqueue(
         dramatiq.Message(
-            queue_name=queue_name, actor_name=task_name, args=(), kwargs=kwargs, options={},
+            queue_name=queue_name,
+            actor_name=task_name,
+            args=(),
+            kwargs=kwargs,
+            options={},
         )
     )
 
@@ -116,7 +119,7 @@ def get_result(
     *,
     queue_name="default",
     block: bool = False,
-    timeout: int = None,
+    timeout: Optional[int] = None,
 ):
     """Get the result from an actor which stores results.
 

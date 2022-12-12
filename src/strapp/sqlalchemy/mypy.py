@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Callable, Optional, Type
 
 import sqlalchemy.ext.mypy.apply
@@ -91,7 +90,8 @@ def make_dt_assignment(api, cls, name, base_cls_name):
             args=[
                 CallExpr(
                     callee=MemberExpr(
-                        expr=MemberExpr(expr=NameExpr("sqlalchemy"), name="types"), name="DateTime",
+                        expr=MemberExpr(expr=NameExpr("sqlalchemy"), name="types"),
+                        name="DateTime",
                     ),
                     args=[],
                     arg_kinds=[],

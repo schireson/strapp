@@ -16,8 +16,7 @@ log = logging.getLogger(__name__)
 
 
 class HTTPException(werkzeug.exceptions.HTTPException, metaclass=abc.ABCMeta):
-    """Common base class on which `strapp` users should base any custom error responses with.
-    """
+    """Common base class on which `strapp` users should base any custom error responses with."""
 
     def __init__(self, description=None):
         self.description = description or self.description
