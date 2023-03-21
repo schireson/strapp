@@ -144,6 +144,8 @@ def push_scope(name=None, *, propagate=True, ignore=(), **tags):
 
         try:
             yield scope
+        except KeyboardInterrupt:
+            raise
         except BaseException as err:
             # Don't capture ignored exception classes
             if isinstance(err, ignore):
