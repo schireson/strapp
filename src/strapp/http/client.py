@@ -78,6 +78,7 @@ class HttpClient:
         data=None,
         files=None,
         auth=None,
+        stream=None,
         timeout=20,
         json=None,
     ):
@@ -109,6 +110,7 @@ class HttpClient:
                 auth=auth,
                 timeout=timeout,
                 json=json,
+                stream=None,
             )
             try:
                 response.raise_for_status()
