@@ -36,7 +36,7 @@ mypy = "^0.991"
 pydocstyle = "^4.0.1"
 pytest = "^6.0"
 pytest-mock-resources = {extras = ["docker"], version = "^2.4.3"}
-requests = "^2.26.0"
+requests = "^2.31.0"
 pytest-alembic = ">=0.6.0"
 types-dataclasses = "^0.6.2"
 types-requests = "^2.26.3"
