@@ -56,7 +56,7 @@ class PreparedActor:
         queue_name: str = "default",
         store_results: bool = False,
         time_limit_ms: int = 1000 * 60 * 60,
-        max_retries: int = 0,
+        max_retries: Optional[int] = 0,
         **options,
     ):
         self.fn = fn
