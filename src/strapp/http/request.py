@@ -241,7 +241,7 @@ def managed_request(retries=6, max_time=60 * 5, base=2, factor=3, exceptions=())
         base=base,
         factor=factor,
     )
-    def request_fn(fn: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:  # type: ignore
+    def request_fn(fn: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
         return fn(*args, **kwargs)
 
     try:
