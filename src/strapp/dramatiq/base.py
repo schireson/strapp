@@ -12,7 +12,10 @@ except Exception:  # nosec
 
 
 def configure(
-    *, redis_dsn=None, enable_datadog_middleware: bool = False, env: Optional[str] = None
+    *,
+    redis_dsn=None,
+    enable_datadog_middleware: bool = False,
+    env: Optional[str] = None,
 ) -> RedisBroker:
     """Configure a Redis broker.
 
@@ -86,7 +89,14 @@ class PreparedActor:
         return actor_decorator(self.fn)
 
 
-def enqueue(task_name, *, queue_name="default", broker=None, **kwargs) -> dramatiq.Message:
+def enqueue(
+    task_name: str,
+    *,
+    queue_name="default",
+    broker=None,
+    pipe_target: Optional[dramatiq.Message] = None,
+    **kwargs,
+) -> dramatiq.Message:
     """Enqueue work onto the queue, by `task_name`.
 
     The "default" behavior is to use the actual python function object `actor.send`. Given
@@ -97,19 +107,39 @@ def enqueue(task_name, *, queue_name="default", broker=None, **kwargs) -> dramat
         task_name: The string name given to the `@actor` decorator.
         queue_name: optional queue name. defaults to "default".
         broker: Overrides the global broker
+        pipe_target: Optional pipe target. This is used to chain tasks together.
         **kwargs: Passed through to the corresponding `@actor` function. Must be json serializable.
     """
     if broker is None:
         broker = dramatiq.get_broker()
 
-    return broker.enqueue(
-        dramatiq.Message(
-            queue_name=queue_name,
-            actor_name=task_name,
-            args=(),
-            kwargs=kwargs,
-            options={},
-        )
+    m = message(
+        task_name,
+        queue_name=queue_name,
+        pipe_target=pipe_target,
+        **kwargs,
+    )
+    return broker.enqueue(m)
+
+
+def message(
+    task_name,
+    *,
+    queue_name="default",
+    pipe_target: Optional[dramatiq.Message] = None,
+    **kwargs,
+) -> dramatiq.Message:
+    """Create a dramatiq message."""
+    options = {}
+    if pipe_target:
+        options["pipe_target"] = pipe_target.asdict()
+
+    return dramatiq.Message(
+        queue_name=queue_name,
+        actor_name=task_name,
+        args=(),
+        kwargs=kwargs,
+        options=options,
     )
 
 
