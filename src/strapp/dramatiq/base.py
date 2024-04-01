@@ -95,6 +95,7 @@ def enqueue(
     queue_name="default",
     broker=None,
     pipe_target: Optional[dramatiq.Message] = None,
+    pipe_ignore: bool = False,
     **kwargs,
 ) -> dramatiq.Message:
     """Enqueue work onto the queue, by `task_name`.
@@ -108,6 +109,7 @@ def enqueue(
         queue_name: optional queue name. defaults to "default".
         broker: Overrides the global broker
         pipe_target: Optional pipe target. This is used to chain tasks together.
+        pipe_target: When True, ignores the result of the previous actor in the pipeline.
         **kwargs: Passed through to the corresponding `@actor` function. Must be json serializable.
     """
     if broker is None:
@@ -117,6 +119,7 @@ def enqueue(
         task_name,
         queue_name=queue_name,
         pipe_target=pipe_target,
+        pipe_ignore=pipe_ignore,
         **kwargs,
     )
     return broker.enqueue(m)
@@ -127,12 +130,16 @@ def message(
     *,
     queue_name="default",
     pipe_target: Optional[dramatiq.Message] = None,
+    pipe_ignore: bool = False,
     **kwargs,
 ) -> dramatiq.Message:
     """Create a dramatiq message."""
     options = {}
     if pipe_target:
         options["pipe_target"] = pipe_target.asdict()
+
+    if pipe_ignore:
+        options["pipe_ignore"] = True
 
     return dramatiq.Message(
         queue_name=queue_name,
