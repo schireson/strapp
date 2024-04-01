@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.3.21"
+version = "0.3.22"
 description = ""
 authors = []
 packages = [
