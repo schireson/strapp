@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "strapp"
-version = "0.3.22"
+version = "0.3.23"
 description = ""
 authors = []
 packages = [
@@ -42,7 +42,7 @@ types-dataclasses = "^0.6.2"
 types-requests = "^2.26.3"
 types-contextvars = "^2.4.0"
 freezegun = "^1.2.1"
-
+responses = "*"
 
 [tool.poetry.extras]
 click = ["click", "dataclasses"]

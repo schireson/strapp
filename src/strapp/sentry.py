@@ -137,7 +137,12 @@ def _parse_body(
 
 @contextlib.contextmanager
 def push_scope(name=None, *, propagate=True, ignore=(), **tags):
-    with sentry_sdk.push_scope() as scope:
+    try:
+        sentry_push_scope = sentry_sdk.new_scope
+    except AttributeError:
+        sentry_push_scope = sentry_sdk.push_scope
+
+    with sentry_push_scope() as scope:
         scope.transaction = name
         for k, v in tags.items():
             scope.set_tag(k, v)
@@ -163,5 +168,5 @@ def push_scope(name=None, *, propagate=True, ignore=(), **tags):
             if propagate:
                 raise
 
-            # Log the error locally when finished propogating. This should not be re-recorded by Sentry.
+            # Log the error locally when finished propagating. This should not be re-recorded by Sentry.
             log.error(err, exc_info=True)

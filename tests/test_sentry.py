@@ -3,7 +3,7 @@ from unittest import mock
 import pytest
 import requests
 
-from strapp.sentry import enrich_http_error, push_scope
+from strapp.sentry import enrich_http_error, push_scope, sentry_sdk
 
 REQUEST_URL = "https://login.microsoftonline.com/common/oauth2/v2.0/token"
 REQUEST_BODY = {
@@ -19,13 +19,28 @@ RESPONSE_BODY = {
 
 
 @pytest.fixture
-def mock_sentry_sdk():
-    with mock.patch("strapp.sentry.sentry_sdk", autospec=True) as mock_sdk:
-        yield mock_sdk
+def sentry_capture_exception():
+    with mock.patch("strapp.sentry.sentry_sdk.capture_exception", autospec=True) as fn:
+        yield fn
+
+
+@pytest.fixture
+def sentry_push_scope():
+    try:
+        sentry_push_scope = sentry_sdk.new_scope
+    except AttributeError:
+        sentry_push_scope = sentry_sdk.push_scope
+
+    scope_name = sentry_push_scope.__name__
+
+    with mock.patch(f"strapp.sentry.sentry_sdk.{scope_name}", autospec=True) as fn:
+        yield fn
 
 
 class Test_EnrichHttpError:
-    def test_it_enriches_sentry_exceptions(self, responses, mock_sentry_sdk):
+    def test_it_enriches_sentry_exceptions(
+        self, responses, sentry_capture_exception, sentry_push_scope
+    ):
         responses.add(responses.POST, REQUEST_URL, json=RESPONSE_BODY, status=400)
 
         with pytest.raises(requests.HTTPError) as excinfo:
@@ -34,8 +49,8 @@ class Test_EnrichHttpError:
                 resp.raise_for_status()
 
         # Validate exception captured and recorded
-        mock_scope = mock_sentry_sdk.push_scope.return_value.__enter__.return_value
-        mock_sentry_sdk.capture_exception.assert_called_once_with(excinfo.value, scope=mock_scope)
+        mock_scope = sentry_push_scope.return_value.__enter__.return_value
+        sentry_capture_exception.assert_called_once_with(excinfo.value, scope=mock_scope)
 
         # Validate scope contexts were set correctly
         assert mock_scope.set_context.call_count == 2
@@ -54,31 +69,27 @@ class Test_EnrichHttpError:
 
 
 class Test_PushScope:
-    def test_it_configures_scope(self, mock_sentry_sdk):
+    def test_it_configures_scope(self, sentry_capture_exception, sentry_push_scope):
         with push_scope("test_scope", tag="tag") as scope:
             assert scope.transaction == "test_scope"
             scope.set_tag.assert_called_once_with("tag", "tag")
 
-        assert mock_sentry_sdk.push_scope.return_value.__enter__.return_value == scope
-        assert (
-            mock_sentry_sdk.push_scope.return_value.__enter__.return_value.set_tag.call_count == 1
-        )
+        assert sentry_push_scope.return_value.__enter__.return_value == scope
+        assert sentry_push_scope.return_value.__enter__.return_value.set_tag.call_count == 1
 
-        mock_scope = mock_sentry_sdk.push_scope.return_value.__enter__.return_value
+        mock_scope = sentry_push_scope.return_value.__enter__.return_value
         mock_scope.set_tag.assert_called_once_with("tag", "tag")
 
-    def test_it_captures_exceptions(self, mock_sentry_sdk):
+    def test_it_captures_exceptions(self, sentry_capture_exception, sentry_push_scope):
         sample_exception = Exception("sample exception")
 
         with push_scope(propagate=False):
             raise sample_exception
 
-        mock_scope = mock_sentry_sdk.push_scope.return_value.__enter__.return_value
-        mock_sentry_sdk.capture_exception.assert_called_once_with(
-            sample_exception, scope=mock_scope
-        )
+        mock_scope = sentry_push_scope.return_value.__enter__.return_value
+        sentry_capture_exception.assert_called_once_with(sample_exception, scope=mock_scope)
 
-    def test_it_propagates_exceptions(mock_sentry_sdk):
+    def test_it_propagates_exceptions(self, sentry_capture_exception):
         sample_exception = Exception("sample exception")
 
         with pytest.raises(sample_exception.__class__) as excinfo:
@@ -87,13 +98,11 @@ class Test_PushScope:
 
         assert excinfo.value is sample_exception
 
-    def test_it_nests_correctly(mock_sentry_sdk):
+    def test_it_nests_correctly(self, sentry_capture_exception):
         sample_exception = Exception("sample exception")
 
         with push_scope("outer_scope", propagate=False) as outer_scope:
             with push_scope("inner_scope", propagate=True):
                 raise sample_exception
 
-            mock_sentry_sdk.capture_exception.assert_called_once_with(
-                sample_exception, scope=outer_scope
-            )
+            sentry_capture_exception.assert_called_once_with(sample_exception, scope=outer_scope)
