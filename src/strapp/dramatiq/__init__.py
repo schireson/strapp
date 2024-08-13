@@ -1,4 +1,4 @@
-from strapp.dramatiq.base import configure, enqueue, get_result, PreparedActor, message
+from strapp.dramatiq.base import configure, enqueue, get_result, message, PreparedActor
 
 __all__ = [
     "PreparedActor",

@@ -109,7 +109,7 @@ def enqueue(
         queue_name: optional queue name. defaults to "default".
         broker: Overrides the global broker
         pipe_target: Optional pipe target. This is used to chain tasks together.
-        pipe_target: When True, ignores the result of the previous actor in the pipeline.
+        pipe_ignore: When True, ignores the result of the previous actor in the pipeline.
         **kwargs: Passed through to the corresponding `@actor` function. Must be json serializable.
     """
     if broker is None:
