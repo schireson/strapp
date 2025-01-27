@@ -2,16 +2,15 @@ import contextlib
 import datetime
 import functools
 import logging
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Optional
 
 import datadog
-from configly import Config
 
 log = logging.getLogger(__name__)
 
 
 def setup(
-    config: Union[Config, Dict[str, Any]],
+    config: Dict[str, Any],
     *,
     environment: Optional[str] = None,
     namespace: Optional[str] = None,
@@ -41,7 +40,10 @@ def setup(
 def require_datadog_initialization(fn):
     @functools.wraps(fn)
     def decorator(*args, **kwargs):
-        if datadog.api._api_key is not None and datadog.api._application_key is not None:
+        if (
+            datadog.api._api_key is not None
+            and datadog.api._application_key is not None
+        ):
             fn(*args, **kwargs)
 
     return decorator
@@ -49,7 +51,9 @@ def require_datadog_initialization(fn):
 
 @require_datadog_initialization
 def increment(metric, value=1, tags=None, sample_rate=None):
-    datadog.statsd.increment(metric=metric, value=value, tags=tags, sample_rate=sample_rate)
+    datadog.statsd.increment(
+        metric=metric, value=value, tags=tags, sample_rate=sample_rate
+    )
 
 
 @require_datadog_initialization

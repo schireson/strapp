@@ -3,9 +3,7 @@ name = "strapp"
 version = "0.3.23"
 description = ""
 authors = []
-packages = [
-    { include = "strapp", from = "src" },
-]
+packages = [{ include = "strapp", from = "src" }]
 include = ["src/strapp/py.typed"]
 
 [tool.poetry.dependencies]
@@ -19,12 +17,11 @@ sentry-sdk = { version = "*", optional = true }
 requests = { version = "*", optional = true }
 sqlalchemy = { version = ">=1.4", optional = true, extras = ["mypy"] }
 flask_reverse_proxy = { version = "*", optional = true }
-setuplog = {version = ">=0.2.2", optional = true}
-backoff = {version = "*", optional = true}
-configly = {version = "*", optional = true}
-datadog = {version = "*", optional = true}
-dramatiq = {version = "*", optional = true, extras = ["redis"]}
-redis = {version = "^4.3.4", optional = true}
+setuplog = { version = ">=0.2.2", optional = true }
+backoff = { version = "*", optional = true }
+datadog = { version = "*", optional = true }
+dramatiq = { version = "*", optional = true, extras = ["redis"] }
+redis = { version = "^4.3.4", optional = true }
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
@@ -35,7 +32,7 @@ isort = "^4.3.21"
 mypy = "^0.991"
 pydocstyle = "^4.0.1"
 pytest = "^6.0"
-pytest-mock-resources = {extras = ["docker"], version = "^2.4.3"}
+pytest-mock-resources = { extras = ["docker"], version = "^2.4.3" }
 requests = "^2.26.0"
 pytest-alembic = ">=0.6.0"
 types-dataclasses = "^0.6.2"
@@ -50,7 +47,7 @@ sqlalchemy = ["sqlalchemy"]
 sentry = ["requests", "sentry-sdk"]
 flask = ["flask", "flask_reverse_proxy", "dataclasses"]
 http = ["backoff", "setuplog"]
-datadog = ["datadog", "configly"]
+datadog = ["datadog"]
 dramatiq = ["dramatiq", "redis"]
 
 [tool.black]
@@ -73,10 +70,7 @@ strict_optional = true
 ignore_missing_imports = true
 warn_unused_ignores = true
 incremental = true
-plugins = [
-    'strapp.sqlalchemy.mypy',
-    'sqlalchemy.ext.mypy.plugin'
-]
+plugins = ['strapp.sqlalchemy.mypy', 'sqlalchemy.ext.mypy.plugin']
 
 [build-system]
 requires = ["poetry-core>=1.0.8"]
