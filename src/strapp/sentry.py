@@ -1,6 +1,7 @@
 import contextlib
 import json
 import logging
+import os
 import urllib.parse
 from typing import Any, Dict, Generator, Optional, Union
 
@@ -170,3 +171,32 @@ def push_scope(name=None, *, propagate=True, ignore=(), **tags):
 
             # Log the error locally when finished propagating. This should not be re-recorded by Sentry.
             log.error(err, exc_info=True)
+
+
+@contextlib.contextmanager
+def capture_failures(strict=False, ignore: tuple = (), name=None, tags={}):
+    """Decorate functions or context-manage blocks of code which should ignore failure in prod.
+
+    Many of the operations performed should ignore uncaught exceptions, because they operate
+    on singular items running in a loop and if it's possible to successfully run non-failing
+    items, it should.
+
+    Examples:
+        >>> @capture_failures()
+        ... def foo():
+        ...     raise Exception()
+        >>> foo()
+
+        >>> def foo():
+        ...     with capture_failures():
+        ...         raise Exception()
+        >>> foo()
+    """
+    # capture is disabled if CAPTURE_FAILURES_ENABLED is set to anything other than "true"
+    capture_disabled = os.environ.get("CAPTURE_FAILURES_ENABLED", "true") != "true"
+    propagate = strict or capture_disabled
+
+    with push_scope(
+        name, propagate=propagate, ignore=(KeyboardInterrupt, *ignore), **tags
+    ) as scope:
+        yield scope
