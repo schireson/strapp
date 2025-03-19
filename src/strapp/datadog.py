@@ -40,10 +40,7 @@ def setup(
 def require_datadog_initialization(fn):
     @functools.wraps(fn)
     def decorator(*args, **kwargs):
-        if (
-            datadog.api._api_key is not None
-            and datadog.api._application_key is not None
-        ):
+        if datadog.api._api_key is not None and datadog.api._application_key is not None:
             fn(*args, **kwargs)
 
     return decorator
@@ -51,9 +48,7 @@ def require_datadog_initialization(fn):
 
 @require_datadog_initialization
 def increment(metric, value=1, tags=None, sample_rate=None):
-    datadog.statsd.increment(
-        metric=metric, value=value, tags=tags, sample_rate=sample_rate
-    )
+    datadog.statsd.increment(metric=metric, value=value, tags=tags, sample_rate=sample_rate)
 
 
 @require_datadog_initialization
